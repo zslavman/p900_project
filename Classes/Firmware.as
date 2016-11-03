@@ -37,7 +37,7 @@ package
 			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
-			menu_screen = ['akustika', 'filter1024', 'filter2048'];
+			menu_screen = ['akustika', 'Filter1024', 'Filter2048'];
 
 		}
 		
