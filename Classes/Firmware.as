@@ -100,7 +100,8 @@ package
 			//trace ('MODE');
 			N++;
 			if (N > menu_screen.length - 1) N = 0;
-			trace (menu_screen[N]);
+			view.container.line2.text = menu_screen[N];
+			
 		}
 		
 		
