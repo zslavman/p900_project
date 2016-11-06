@@ -167,6 +167,9 @@ package
 			
 			view.FillTextFields();
 			view.LangTween();
+			if (firmware != null && model.loading_ready) {
+				firmware.Screen_init();
+			}
         }
 		
 		
@@ -184,6 +187,8 @@ package
 				view.LCD.contrastMax_scr.visible = true;
 				
 				firmware = new Firmware(view, model);
+				view.dispatchEvent(new Event(EventTypes.LIGHT_CLICK));
+				
 			} 
 			
 			else { // вЫЫЫключение

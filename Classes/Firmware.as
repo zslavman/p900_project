@@ -9,6 +9,21 @@ package
 	 * ...
 	 * @author zslavman
 	 */
+	
+	//TODO: сделать зажимание кнопок
+	//TODO: сделать таймер мигания красного светодиода
+	//TODO: сделать наложение шума на мВ
+	//TODO: сделать случайную вариацию заряда батареи при включении
+	//TODO: сделать визуализацию подключение зарядки
+	//TODO: сделать окно About
+	//TODO: сделать всплывающие подсказки
+	
+	
+	 
+	 
+	 
+	 
+	 
 	public class Firmware {
 	
 		private var model:Model;
@@ -16,8 +31,8 @@ package
 		
 		private var Timer_LoadingFwr:Timer = new Timer(250);
 		private var loading_duration:uint = 8; //длительность загрузки 
-		private var menu_now:String;
-		private var N:uint = 0;
+		private var menu_now:String; // для обработки кнопок, что бы понимать в каком меню сейчас
+		private var N:uint = 0; // номер текущего меню
 		
 		private var mode_akustika:Object = {};
 		private var mode_filter1024:Object = {};
@@ -25,6 +40,7 @@ package
 		private var menu_array:Array = [];
 		
 
+		
 		
 		public function Firmware(_view:View, _model:Model) {
 			
@@ -43,22 +59,25 @@ package
 			
 
 			// объекты в которых храняться текущие настройки выбранного режима
+			mode_filter1024.id = 'mode_filter1024';
 			mode_filter1024.name = Model.langArr[15];
-			mode_filter1024.gain = Model.gainFilterConst[20];
+			mode_filter1024.gain = 20; // номер элемента массива коэффициентов усиления
 			mode_filter1024.gain_val = '0.001';
 			
+			mode_filter2048.id = 'mode_filter2048';
 			mode_filter2048.name = Model.langArr[16];
-			mode_filter2048.gain = Model.gainFilterConst[20];
+			mode_filter2048.gain = 20;
 			mode_filter2048.gain_val = '0.001';
 			
+			mode_akustika.id = 'mode_akustika';
 			mode_akustika.name = '';
-			mode_akustika.gain = Model.gainAcusticaConst[5];
-			mode_akustika.gain_val = '0.00';
-			mode_akustika.sync_value = 0;
+			mode_akustika.gain = 5;
+			mode_akustika.gain_val = 0;
+			mode_akustika.sync_value = '0.00';
 			
 			menu_array = [mode_akustika, mode_filter1024, mode_filter2048];
 
-			menu_now = menu_array[0];
+			menu_now = menu_array[N].id;
 
 		}
 		
@@ -75,9 +94,8 @@ package
 			}
 			
 			else if (Timer_LoadingFwr.currentCount == loading_duration) {
-				view.container.line2.text = '';
-				view.container.line1.text = Model.langArr[15][model.LANG];
 				view.container.battery_indication.visible = true;
+				Screen_init();
 			
 				Timer_LoadingFwr.reset();
 				model.loading_ready = true;
@@ -94,7 +112,11 @@ package
 		 */ //****************************************
 		public function func_Sync_UP(event:Event):void {
 		
-			trace ('SYNC_UP');
+			if (menu_now == 'mode_akustika') {
+				menu_array[N].gain_val++;
+				if (menu_array[N].gain_val > 9) menu_array[N].gain_val = 9;
+				Screen_init();
+			}
 		}
 		
 		
@@ -106,7 +128,11 @@ package
 		 */ //****************************************
 		public function func_Sync_DOWN(event:Event):void {
 		
-			trace ('SYNC_DOWN');
+			if (menu_now == 'mode_akustika') {
+				menu_array[N].gain_val--;
+				if (menu_array[N].gain_val < 0) menu_array[N].gain_val = 0;
+				Screen_init();
+			}
 		}
 		
 		
@@ -120,9 +146,8 @@ package
 		
 			N++;
 			if (N > menu_array.length - 1) N = 0;
-			view.container.line1.text = menu_array[N].name;
-			menu_now = menu_array[N];
-			
+			menu_now = menu_array[N].id;
+			Screen_init();
 			trace ("menu_now = " + menu_now);
 			
 		}
@@ -135,8 +160,15 @@ package
 		 *                                           *
 		 */ //****************************************
 		public function func_Ampl_UP(event:Event):void {
-		
-			trace ('AMPL_UP');
+
+			menu_array[N].gain++;
+			if (menu_now == 'mode_akustika') {
+				if (menu_array[N].gain > Model.gainAcusticaConst.length - 1) menu_array[N].gain = Model.gainAcusticaConst.length - 1;
+			}
+			else {
+				if (menu_array[N].gain > Model.gainFilterConst.length - 1) menu_array[N].gain = Model.gainFilterConst.length - 1;
+			}
+			Screen_init();
 		}
 		
 		
@@ -148,8 +180,42 @@ package
 		 */ //****************************************
 		public function func_Ampl_DOWN(event:Event):void {
 		
-			trace ('AMPL_DOWN');
+			menu_array[N].gain--;
+			if (menu_now == 'mode_akustika') {
+				if (menu_array[N].gain < 0) menu_array[N].gain = 0;
+			}
+			else {
+				if (menu_array[N].gain < 0) menu_array[N].gain = 0;
+			}
+			Screen_init();
 		}
+		
+		
+		
+		
+		
+		
+		
+		// инициализация экрана в любом из меню
+		public function Screen_init ():void {
+			
+			Destroy_text();
+
+			if (menu_now == 'mode_akustika') {
+				view.container.line2.text = '×00' + menu_array[N].gain_val;
+				view.container.line1.text = menu_array[N].sync_value  + Model.langArr[18][model.LANG];
+				view.container.gain_place.text = '×' + Model.gainAcusticaConst[menu_array[N].gain];
+			}
+			else {
+				view.container.line1.text = menu_array[N].name[model.LANG];
+				view.container.line2.text = menu_array[N].gain_val + Model.langArr[17][model.LANG];
+				view.container.gain_place.text = '×' + Model.gainFilterConst[menu_array[N].gain];
+			}
+		}
+		
+		
+		
+		
 		
 		
 		
