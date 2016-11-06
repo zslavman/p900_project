@@ -9,11 +9,16 @@ package
 	public class Model {
 		
 		public static const langArr:Array = [];
+		public static var gainFilterConst = [];
+		public static var gainAcusticaConst = []
+		
 		private var _LANG:uint;
 		private var _TURNED_ON:Boolean = false;
 		private var _LIGHT_ON:Boolean = false;
 		private var _ScreenALPHA:Number = 0;
 		private var _loading_ready:Boolean = false;
+		
+
 		
 		public function Model(language:uint) {
 			
@@ -41,10 +46,16 @@ package
 			langArr[19] = [" Ver 3.2.8", " Ver 3.2.8"];
 			langArr[20] = ["", ""];
 			
-			var gainFilter:Array = ["1.0", "1.2", "1.5", "1.9", "2.4", "3.0", "3.7", "4.8", "6.0", "7.5", "10.0", "12.5", "15.5", "19.5", 24, 31, 40, 50, 65, 80, 100, 130, 160, 200, 250, 325, 420, 520, 650, 850, 1050, 1300, 1700, 2100, 2800, 3500, 4300, 5500, 8000, 10000, 12000, 16000, 20000, 25000, 50000]; //45 элементов, начинать с 21-го
-			var gainAcustica:Array = [1, "1.3", "1.6", 2, "2.4", 3, 4, 5, 6, 8, 10, 13, 16, 20, 26, 33, 44, 53, 67, 92, 110, 200, 400, 800, 1600, 3000, 6000, 12000, 20000, 40000]; //30 элементов, начинать с 5-го
+			gainFilterConst = ["1.0", "1.2", "1.5", "1.9", "2.4", "3.0", "3.7", "4.8", "6.0", "7.5", "10.0", "12.5", "15.5", "19.5", 24, 31, 40, 50, 65, 80, 100, 130, 160, 200, 250, 325, 420, 520, 650, 850, 1050, 1300, 1700, 2100, 2800, 3500, 4300, 5500, 8000, 10000, 12000, 16000, 20000, 25000, 50000]; //45 элементов, начинать с 21-го
+			gainAcusticaConst = [1, "1.3", "1.6", 2, "2.4", 3, 4, 5, 6, 8, 10, 13, 16, 20, 26, 33, 44, 53, 67, 92, 110, 200, 400, 800, 1600, 3000, 6000, 12000, 20000, 40000]; //30 элементов, начинать с 5-го
 		
+
 		}
+		
+		
+
+		
+		
 		
 		public function get LANG():uint {
 			return _LANG;
@@ -85,9 +96,7 @@ package
 		public function set loading_ready(value:Boolean):void {
 			_loading_ready = value;
 		}
-		
-		
-	
+
 	}
 
 }

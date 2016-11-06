@@ -16,11 +16,15 @@ package
 		
 		private var Timer_LoadingFwr:Timer = new Timer(250);
 		private var loading_duration:uint = 8; //длительность загрузки 
-		private var menu_screen:Array = [];
+		private var menu_now:String;
 		private var N:uint = 0;
 		
+		private var mode_akustika:Object = {};
+		private var mode_filter1024:Object = {};
+		private var mode_filter2048:Object = {};
+		private var menu_array:Array = [];
 		
-		
+
 		
 		public function Firmware(_view:View, _model:Model) {
 			
@@ -37,7 +41,24 @@ package
 			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
-			menu_screen = ['akustika', 'Filter1024', 'Filter2048'];
+
+			// объекты в которых храняться текущие настройки выбранного режима
+			mode_filter1024.name = Model.langArr[15];
+			mode_filter1024.gain = Model.gainFilterConst[20];
+			mode_filter1024.gain_val = '0.001';
+			
+			mode_filter2048.name = Model.langArr[16];
+			mode_filter2048.gain = Model.gainFilterConst[20];
+			mode_filter2048.gain_val = '0.001';
+			
+			mode_akustika.name = '';
+			mode_akustika.gain = Model.gainAcusticaConst[5];
+			mode_akustika.gain_val = '0.00';
+			mode_akustika.sync_value = 0;
+			
+			menu_array = [mode_akustika, mode_filter1024, mode_filter2048];
+
+			menu_now = menu_array[0];
 
 		}
 		
@@ -97,10 +118,12 @@ package
 		 */ //****************************************
 		public function func_MODE(event:Event):void {
 		
-			//trace ('MODE');
 			N++;
-			if (N > menu_screen.length - 1) N = 0;
-			view.container.line2.text = menu_screen[N];
+			if (N > menu_array.length - 1) N = 0;
+			view.container.line1.text = menu_array[N].name;
+			menu_now = menu_array[N];
+			
+			trace ("menu_now = " + menu_now);
 			
 		}
 		
