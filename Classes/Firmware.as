@@ -11,7 +11,7 @@ package
 	 */
 	
 	//TODO: сделать зажимание кнопок
-	//TODO: сделать таймер мигания красного светодиода
+	//TODO: поправить переключалку языка (съехал текст)
 	//TODO: сделать наложение шума на мВ
 	//TODO: сделать случайную вариацию заряда батареи при включении
 	//TODO: сделать визуализацию подключение зарядки
@@ -30,6 +30,8 @@ package
 		private var view:View;
 		
 		private var Timer_LoadingFwr:Timer = new Timer(250);
+		private var Timer_Miganie:Timer = new Timer(200);
+		private var count_mig:uint = 0;
 		private var loading_duration:uint = 8; //длительность загрузки 
 		private var menu_now:String; // для обработки кнопок, что бы понимать в каком меню сейчас
 		private var N:uint = 0; // номер текущего меню
@@ -38,6 +40,7 @@ package
 		private var mode_filter1024:Object = {};
 		private var mode_filter2048:Object = {};
 		private var menu_array:Array = [];
+		private var plus_minus_flag:Boolean = false;
 		
 
 		
@@ -54,6 +57,7 @@ package
 			
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
+			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
 			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
@@ -104,6 +108,40 @@ package
 		
 		
 		
+		/*********************************************
+		 *        Таймер мигания красным LED         *
+		 *                                           *
+		 */ //****************************************
+		public function func_Timer_Miganie(event:TimerEvent):void {
+			
+			count_mig++;
+			if (count_mig > 10) count_mig = 0;
+			
+			if (count_mig == 8) {
+				view.LED_red.gotoAndStop('frame_on');
+				if (plus_minus_flag) {
+					view.container.s_plus_place.text = Model.langArr[20][model.LANG];
+					plus_minus_flag = false;
+				}
+				else {
+					view.container.s_plus_place.text = Model.langArr[21][model.LANG];
+					plus_minus_flag = true;
+				}
+				
+			}
+			if (count_mig == 10) {
+				view.LED_red.gotoAndStop('frame_off');
+				view.container.s_plus_place.text = '';
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		/*********************************************
@@ -115,6 +153,7 @@ package
 			if (menu_now == 'mode_akustika') {
 				menu_array[N].gain_val++;
 				if (menu_array[N].gain_val > 9) menu_array[N].gain_val = 9;
+				if (menu_array[N].gain_val > 8) Timer_Miganie.start();
 				Screen_init();
 			}
 		}
@@ -132,6 +171,7 @@ package
 				menu_array[N].gain_val--;
 				if (menu_array[N].gain_val < 0) menu_array[N].gain_val = 0;
 				Screen_init();
+				Miganie_Off();
 			}
 		}
 		
@@ -148,8 +188,12 @@ package
 			if (N > menu_array.length - 1) N = 0;
 			menu_now = menu_array[N].id;
 			Screen_init();
-			trace ("menu_now = " + menu_now);
 			
+			// включение и выключение красной мигалки 
+			if (menu_now == 'mode_akustika' && menu_array[N].gain_val > 8) Timer_Miganie.start();
+			else if (menu_now != 'mode_akustika') Miganie_Off();
+		
+			trace ("menu_now = " + menu_now);
 		}
 		
 		
@@ -239,11 +283,18 @@ package
 			view.removeEventListener(EventTypes.AMPL_UP_CLICK, func_Ampl_UP);
 			view.removeEventListener(EventTypes.AMPL_DOWN_CLICK, func_Ampl_DOWN);
 			Timer_LoadingFwr.reset();
+			Miganie_Off();
 			view.container.visible = false;
 			Destroy_text();
 			model.loading_ready = false;
 		}
 		
-
+		public function Miganie_Off():void {
+		
+			Timer_Miganie.reset();
+			count_mig = 0;
+			view.LED_red.gotoAndStop('frame_off');
+			view.container.s_plus_place.text = '';
+		}
 	}
 }
