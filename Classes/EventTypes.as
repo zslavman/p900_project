@@ -24,6 +24,8 @@ package
 		public static const AMPL_UP_CLICK:String = "amplUpClick";
 		public static const AMPL_DOWN_CLICK:String = "amplDownClick";
 		
+		public static const JAMM_BUTTON:String = "jammButton";
+		
 		
 		
 

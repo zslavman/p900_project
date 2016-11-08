@@ -54,6 +54,7 @@ package
 			power_switcher.buttonMode = true;
 			power_switcher.mouseChildren = false;
 			
+			// слушатели на нажатие и зажимание
 			button_sync_up.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
 			button_sync_down.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
 			button_light.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
@@ -62,7 +63,6 @@ package
 			button_amp_down.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
 			
 			
-
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
 			STAGE.addEventListener(MouseEvent.MOUSE_MOVE, contrast_handle_MOUSE_MOVE);
 			STAGE.addEventListener(MouseEvent.MOUSE_UP, contrast_handle_MOUSE_UP);
@@ -143,6 +143,9 @@ package
 					dispatchEvent(new Event(EventTypes.AMPL_DOWN_CLICK));
 				break;
 			}
+			
+			dispatchEvent(new Event(EventTypes.JAMM_BUTTON));
+			trace ("event = " + event.target.name);
 		}
 		
 		

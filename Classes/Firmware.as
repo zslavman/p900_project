@@ -55,6 +55,12 @@ package
 			view.addEventListener(EventTypes.AMPL_UP_CLICK, func_Ampl_UP);
 			view.addEventListener(EventTypes.AMPL_DOWN_CLICK, func_Ampl_DOWN);
 			
+			
+			// слушател на зажимание кнопок
+			view.addEventListener(EventTypes.JAMM_BUTTON, func_all_Buttons_DOWN);
+			
+
+			
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
 			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
@@ -84,6 +90,27 @@ package
 			menu_now = menu_array[N].id;
 
 		}
+		
+		
+		/*********************************************
+		 *              Зажимание кнопок             *
+		 *                                           *
+		 */ //****************************************
+		public function func_all_Buttons_DOWN(event:Event):void {
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -193,7 +220,7 @@ package
 			if (menu_now == 'mode_akustika' && menu_array[N].gain_val > 8) Timer_Miganie.start();
 			else if (menu_now != 'mode_akustika') Miganie_Off();
 		
-			trace ("menu_now = " + menu_now);
+			//trace ("menu_now = " + menu_now);
 		}
 		
 		
