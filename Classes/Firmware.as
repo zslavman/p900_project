@@ -31,16 +31,18 @@ package
 		
 		private var Timer_LoadingFwr:Timer = new Timer(250);
 		private var Timer_Miganie:Timer = new Timer(200);
-		private var count_mig:uint = 0;
+		private var Timer_Jamming:Timer = new Timer(100);
+		private var count_mig:uint = 0; // счетчик для управл. миганием
 		private var loading_duration:uint = 8; //длительность загрузки 
 		private var menu_now:String; // для обработки кнопок, что бы понимать в каком меню сейчас
-		private var N:uint = 0; // номер текущего меню
+		private var N:uint = 0; // номер текущего меню (номер элемента из массива меню)
 		
 		private var mode_akustika:Object = {};
 		private var mode_filter1024:Object = {};
 		private var mode_filter2048:Object = {};
 		private var menu_array:Array = [];
 		private var plus_minus_flag:Boolean = false;
+		private var button_flag:String = '';
 		
 
 		
@@ -56,14 +58,16 @@ package
 			view.addEventListener(EventTypes.AMPL_DOWN_CLICK, func_Ampl_DOWN);
 			
 			
-			// слушател на зажимание кнопок
+			// слушатель на зажимание кнопок
 			view.addEventListener(EventTypes.JAMM_BUTTON, func_all_Buttons_DOWN);
+			view.addEventListener(EventTypes.UNJAMM_BUTTON, func_all_Buttons_UP);
 			
 
 			
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
 			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
+			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Jamming);
 			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
@@ -93,16 +97,55 @@ package
 		
 		
 		/*********************************************
-		 *              Зажимание кнопок             *
+		 *      Зажимание/отпускание кнопок          *
 		 *                                           *
 		 */ //****************************************
 		public function func_all_Buttons_DOWN(event:Event):void {
 			
+			Timer_Jamming.start();
+		}
+		public function func_all_Buttons_UP(event:Event):void {
 			
-			
+			Timer_Jamming.reset();
 		}
 		
 		
+		
+		
+		
+		
+		/*********************************************
+		 *       Таймер счета зажимания кнопок       *
+		 *                                           *
+		 */ //****************************************
+		public function func_Timer_Jamming(event:TimerEvent):void {
+			
+			if (Timer_Jamming.currentCount == 8) {
+				Timer_Jamming.reset();
+				// запуск таймера повтора
+				Timer_FastInput.start();
+			} 
+		}
+		
+		/*********************************************
+		 *          Таймер быстрого ввода            *
+		 *                                           *
+		 */ //****************************************
+		public function func_Timer_Jamming(event:TimerEvent):void {
+			
+			// в зависимости от флага запуск диспатчера
+			switch (button_flag){ 
+			
+				case :
+					
+				break;
+			}
+			
+			
+			
+			if (BUTTON_DOWN) button2.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+			else if (BUTTON_UP) button3.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN)); 
+		}
 		
 		
 		

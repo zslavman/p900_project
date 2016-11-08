@@ -62,6 +62,16 @@ package
 			button_amp_up.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
 			button_amp_down.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
 			
+			// слушатели отпускания кнопки
+			button_sync_up.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
+			button_sync_down.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
+			button_light.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
+			button_mode.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
+			button_amp_up.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
+			button_amp_down.addEventListener(MouseEvent.MOUSE_, functional_button_MOUSE_UP);
+			
+			
+			
 			
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
 			STAGE.addEventListener(MouseEvent.MOUSE_MOVE, contrast_handle_MOUSE_MOVE);
@@ -119,7 +129,7 @@ package
 		}
 		
 		
-		// кнопки
+		// нажатие кнопок
 		public function functional_button_MOUSE_DOWN(event:MouseEvent):void { 
 
 			switch (event.target.name){ 
@@ -146,6 +156,13 @@ package
 			
 			dispatchEvent(new Event(EventTypes.JAMM_BUTTON));
 			trace ("event = " + event.target.name);
+		}
+		
+		
+		// отпускание кнопок
+		public function functional_button_MOUSE_UP(event:MouseEvent):void {
+			
+			dispatchEvent(new Event(EventTypes.UNJAMM_BUTTON));
 		}
 		
 		
