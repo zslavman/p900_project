@@ -32,19 +32,22 @@ package
 		private var Timer_Miganie:Timer = new Timer(200);
 		private var Timer_Jamming:Timer = new Timer(100);
 		private var Timer_FastInput:Timer = new Timer(100);
-		
+		private var Timer_Noise:Timer = new Timer(1500);
 		
 		private var count_mig:uint = 0; // счетчик для управл. миганием
 		private var loading_duration:uint = 8; //длительность загрузки 
-		private var menu_now:String; // для обработки кнопок, что бы понимать в каком меню сейчас
+		private var menu_now:String; // для обработки кнопок, чтобы понимать в каком меню сейчас
 		private var N:uint = 0; // номер текущего меню (номер элемента из массива меню)
 		
 		private var mode_akustika:Object = {};
 		private var mode_filter1024:Object = {};
 		private var mode_filter2048:Object = {};
-		private var menu_array:Array = [];
-		private var plus_minus_flag:Boolean = false;
-		private var button_flag:String = '';
+		private var menu_array:Array = []; // массив экранов меню
+		private var plus_minus_flag:Boolean = false; // флаг какой показывать знак +S или -S
+		private var button_flag:String = ''; // флаг какая кнопка нажата, для ускоренного ввода
+		private var min_noise:Number = 0.001;
+		private var max_noise:Number = 0.002;
+		private var show_coefficient:Boolean = false;// флаг показать коэф.
 		
 
 		
@@ -53,6 +56,10 @@ package
 			
 			view = _view;
 			model = _model;
+
+			view.addEventListener(EventTypes.MODE_CLICK, func_MODE);
+			view.addEventListener(EventTypes.UNJAMM_BUTTON, func_all_Buttons_UP);
+			
 			view.addEventListener(EventTypes.SYNC_UP_CLICK, func_Sync_UP);
 			view.addEventListener(EventTypes.SYNC_DOWN_CLICK, func_Sync_DOWN);
 			view.addEventListener(EventTypes.MODE_CLICK, func_MODE);
@@ -62,15 +69,14 @@ package
 			
 			// слушатель на зажимание кнопок
 			view.addEventListener(EventTypes.JAMM_BUTTON, func_all_Buttons_DOWN);
-			view.addEventListener(EventTypes.UNJAMM_BUTTON, func_all_Buttons_UP);
 			
-
-			
+					
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
 			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
 			Timer_Jamming.addEventListener(TimerEvent.TIMER, func_Timer_Jamming);
 			Timer_FastInput.addEventListener(TimerEvent.TIMER, func_Timer_FastInput);
+			Timer_Noise.addEventListener(TimerEvent.TIMER, func_Timer_Noise);
 			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
@@ -101,6 +107,23 @@ package
 		
 		
 		
+
+		
+		/*********************************************
+		 *                 Таймер шума               *
+		 *                                           *
+		 */ //****************************************
+		public function func_Timer_Noise(event:TimerEvent):void {
+			
+			var calculated_noise:Number = RAND(min_noise, max_noise);
+			var string_noise:String = calculated_noise.toFixed(3);
+		
+			mode_filter1024.gain_val = string_noise;
+			mode_filter2048.gain_val = string_noise;
+			
+			Screen_init();
+		}
+		
 		
 		
 		
@@ -112,7 +135,6 @@ package
 		public function func_all_Buttons_DOWN(event:Event):void {
 			
 			Timer_Jamming.start();
-			trace ('JAMM');
 		}
 		
 		
@@ -124,7 +146,7 @@ package
 			
 			if (Timer_Jamming.currentCount == 8) {
 				Timer_Jamming.reset();
-				trace ('Jamming_' + Timer_Jamming.currentCount);
+				//trace ('Jamming_' + Timer_Jamming.currentCount);
 				// запуск таймера повтора
 				Timer_FastInput.start();
 			} 
@@ -152,7 +174,7 @@ package
 		public function func_Timer_FastInput(event:TimerEvent):void {
 			
 			// в зависимости от флага запуск диспатчера
-			trace ('FastInput_' + Timer_FastInput.currentCount);
+			//trace ('FastInput_' + Timer_FastInput.currentCount, 'button_flag = ' + button_flag);
 			switch (button_flag){ 
 				case 'button_sync_up':
 					view.dispatchEvent(new Event(EventTypes.SYNC_UP_CLICK));
@@ -185,17 +207,30 @@ package
 		 */ //****************************************
 		public function func_Timer_LoadingFwr(event:TimerEvent):void {
 			
-			if (Timer_LoadingFwr.currentCount < loading_duration) {
+			if (Timer_LoadingFwr.currentCount < loading_duration - 1) {
 				view.container.line2.text = Model.langArr[19][model.LANG];
 			}
 			
+			// если время таймера на 1 меньше чем длительность загрузки
+			else if (Timer_LoadingFwr.currentCount == loading_duration - 1) {
+				// если зажата кнопка РЕЖИМ
+				if (button_flag == 'button_mode') {
+					Timer_LoadingFwr.stop();
+					view.container.line2.text = Model.langArr[22][model.LANG];
+					show_coefficient = true;
+				}
+			}
+			
 			else if (Timer_LoadingFwr.currentCount == loading_duration) {
+ 
 				view.container.battery_indication.visible = true;
 				Screen_init();
 			
 				Timer_LoadingFwr.reset();
+				show_coefficient = false;
 				model.loading_ready = true;
 			}
+			trace ("Timer_LoadingFwr.currentCount = " + Timer_LoadingFwr.currentCount);
 		}
 		
 		
@@ -242,15 +277,24 @@ package
 		 */ //****************************************
 		public function func_Sync_UP(event:Event):void {
 		
-			button_flag = 'button_sync_up';
-			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
-			
-			if (menu_now == 'mode_akustika') {
-				menu_array[N].gain_val++;
-				if (menu_array[N].gain_val > 9) menu_array[N].gain_val = 9;
-				if (menu_array[N].gain_val > 8) Timer_Miganie.start();
-				Screen_init();
+			if (model.loading_ready) {
+				button_flag = 'button_sync_up';
+				view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+				
+				if (menu_now == 'mode_akustika') {
+					menu_array[N].gain_val++;
+					if (menu_array[N].gain_val > 9) menu_array[N].gain_val = 9;
+					if (menu_array[N].gain_val > 8) Timer_Miganie.start();
+					Screen_init();
+				}
 			}
+			// продолжение загрузки
+			if (show_coefficient) {
+				show_coefficient = false;
+				Timer_LoadingFwr.start();
+				trace('жопа');
+			}
+			
 		}
 		
 		
@@ -262,15 +306,19 @@ package
 		 */ //****************************************
 		public function func_Sync_DOWN(event:Event):void {
 		
-			button_flag = 'button_sync_down';
-			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
-			
-			if (menu_now == 'mode_akustika') {
-				menu_array[N].gain_val--;
-				if (menu_array[N].gain_val < 0) menu_array[N].gain_val = 0;
-				Screen_init();
-				Miganie_Off();
+			if (model.loading_ready) {
+				button_flag = 'button_sync_down';
+				view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+				
+				if (menu_now == 'mode_akustika') {
+					menu_array[N].gain_val--;
+					if (menu_array[N].gain_val < 0) menu_array[N].gain_val = 0;
+					Screen_init();
+					Miganie_Off();
+				}
 			}
+			// продолжение загрузки
+			if (show_coefficient) Timer_LoadingFwr.start();
 		}
 		
 		
@@ -282,16 +330,30 @@ package
 		 */ //****************************************
 		public function func_MODE(event:Event):void {
 		
-			N++;
-			if (N > menu_array.length - 1) N = 0;
-			menu_now = menu_array[N].id;
-			Screen_init();
-			
-			// включение и выключение красной мигалки 
-			if (menu_now == 'mode_akustika' && menu_array[N].gain_val > 8) Timer_Miganie.start();
-			else if (menu_now != 'mode_akustika') Miganie_Off();
-		
-			//trace ("menu_now = " + menu_now);
+			if (Timer_LoadingFwr.running) {
+				button_flag = 'button_mode';
+				view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+			}
+			else {
+				if (model.loading_ready) {
+					N++;
+					if (N > menu_array.length - 1) N = 0;
+					menu_now = menu_array[N].id;
+					Screen_init();
+					
+					// включение и выключение красной мигалки 
+					if (menu_now == 'mode_akustika' && menu_array[N].gain_val > 8) {
+						Timer_Miganie.start();
+						Timer_Noise.reset();
+					}
+					else if (menu_now != 'mode_akustika') {
+						Miganie_Off();
+						Timer_Noise.start();
+					}
+				}
+			// продолжение загрузки
+			if (show_coefficient) Timer_LoadingFwr.start();
+			}
 		}
 		
 		
@@ -303,17 +365,21 @@ package
 		 */ //****************************************
 		public function func_Ampl_UP(event:Event):void {
 
-			button_flag = 'button_amp_up';
-			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
-			menu_array[N].gain++;
-			
-			if (menu_now == 'mode_akustika') {
-				if (menu_array[N].gain > Model.gainAcusticaConst.length - 1) menu_array[N].gain = Model.gainAcusticaConst.length - 1;
+			if (model.loading_ready) {
+				button_flag = 'button_amp_up';
+				view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+				menu_array[N].gain++;
+				
+				if (menu_now == 'mode_akustika') {
+					if (menu_array[N].gain > Model.gainAcusticaConst.length - 1) menu_array[N].gain = Model.gainAcusticaConst.length - 1;
+				}
+				else {
+					if (menu_array[N].gain > Model.gainFilterConst.length - 1) menu_array[N].gain = Model.gainFilterConst.length - 1;
+				}
+				Screen_init();
 			}
-			else {
-				if (menu_array[N].gain > Model.gainFilterConst.length - 1) menu_array[N].gain = Model.gainFilterConst.length - 1;
-			}
-			Screen_init();
+			// продолжение загрузки
+			if (show_coefficient) Timer_LoadingFwr.start();
 		}
 		
 		
@@ -325,17 +391,21 @@ package
 		 */ //****************************************
 		public function func_Ampl_DOWN(event:Event):void {
 		
-			button_flag = 'button_amp_down';
-			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
-			menu_array[N].gain--;
-			
-			if (menu_now == 'mode_akustika') {
-				if (menu_array[N].gain < 0) menu_array[N].gain = 0;
+			if (model.loading_ready) {
+				button_flag = 'button_amp_down';
+				view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+				menu_array[N].gain--;
+				
+				if (menu_now == 'mode_akustika') {
+					if (menu_array[N].gain < 0) menu_array[N].gain = 0;
+				}
+				else {
+					if (menu_array[N].gain < 0) menu_array[N].gain = 0;
+				}
+				Screen_init();
 			}
-			else {
-				if (menu_array[N].gain < 0) menu_array[N].gain = 0;
-			}
-			Screen_init();
+			// продолжение загрузки
+			if (show_coefficient) Timer_LoadingFwr.start();
 		}
 		
 		
@@ -363,9 +433,7 @@ package
 		
 		
 		
-		
-		
-		
+
 		
 		
 		private function Destroy_text():void {
@@ -386,12 +454,17 @@ package
 			view.removeEventListener(EventTypes.MODE_CLICK, func_MODE);
 			view.removeEventListener(EventTypes.AMPL_UP_CLICK, func_Ampl_UP);
 			view.removeEventListener(EventTypes.AMPL_DOWN_CLICK, func_Ampl_DOWN);
+			view.removeEventListener(EventTypes.JAMM_BUTTON, func_all_Buttons_DOWN);
+			view.removeEventListener(EventTypes.UNJAMM_BUTTON, func_all_Buttons_UP);
 			Timer_LoadingFwr.reset();
+			Timer_Noise.reset();
+			Timer_FastInput.reset();
 			Miganie_Off();
 			view.container.visible = false;
 			Destroy_text();
 			model.loading_ready = false;
 		}
+		
 		
 		public function Miganie_Off():void {
 		
@@ -399,6 +472,14 @@ package
 			count_mig = 0;
 			view.LED_red.gotoAndStop('frame_off');
 			view.container.s_plus_place.text = '';
+		}
+		
+		
+		// рандомайзер
+		public function RAND(min:Number, max:Number): Number {
+
+			var arg: Number = (max - min) * Math.random() + min;
+			return arg;
 		}
 	}
 }
