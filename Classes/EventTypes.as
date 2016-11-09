@@ -26,6 +26,7 @@ package
 		
 		public static const JAMM_BUTTON:String = "jammButton";
 		public static const UNJAMM_BUTTON:String = "unJammButton";
+		public static const BUTTON_MOUSE_OUT:String = "outButton";
 		
 		
 		

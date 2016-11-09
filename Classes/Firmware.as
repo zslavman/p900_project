@@ -10,13 +10,12 @@ package
 	 * @author zslavman
 	 */
 	
-	//TODO: сделать зажимание кнопок
-	//TODO: поправить переключалку языка (съехал текст)
 	//TODO: сделать наложение шума на мВ
 	//TODO: сделать случайную вариацию заряда батареи при включении
 	//TODO: сделать визуализацию подключение зарядки
 	//TODO: сделать окно About
 	//TODO: сделать всплывающие подсказки
+	//TODO: поправить переключалку языка (съехал текст)
 	
 	
 	 
@@ -32,6 +31,9 @@ package
 		private var Timer_LoadingFwr:Timer = new Timer(250);
 		private var Timer_Miganie:Timer = new Timer(200);
 		private var Timer_Jamming:Timer = new Timer(100);
+		private var Timer_FastInput:Timer = new Timer(100);
+		
+		
 		private var count_mig:uint = 0; // счетчик для управл. миганием
 		private var loading_duration:uint = 8; //длительность загрузки 
 		private var menu_now:String; // для обработки кнопок, что бы понимать в каком меню сейчас
@@ -67,7 +69,8 @@ package
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
 			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
-			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Jamming);
+			Timer_Jamming.addEventListener(TimerEvent.TIMER, func_Timer_Jamming);
+			Timer_FastInput.addEventListener(TimerEvent.TIMER, func_Timer_FastInput);
 			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
@@ -96,55 +99,74 @@ package
 		}
 		
 		
+		
+		
+		
+		
+		
+		
 		/*********************************************
-		 *      Зажимание/отпускание кнопок          *
+		 *            Зажимание  кнопок              *
 		 *                                           *
 		 */ //****************************************
 		public function func_all_Buttons_DOWN(event:Event):void {
 			
 			Timer_Jamming.start();
+			trace ('JAMM');
 		}
-		public function func_all_Buttons_UP(event:Event):void {
-			
-			Timer_Jamming.reset();
-		}
-		
-		
-		
-		
 		
 		
 		/*********************************************
-		 *       Таймер счета зажимания кнопок       *
+		 *     Таймер задержки зажимания кнопок      *
 		 *                                           *
 		 */ //****************************************
 		public function func_Timer_Jamming(event:TimerEvent):void {
 			
 			if (Timer_Jamming.currentCount == 8) {
 				Timer_Jamming.reset();
+				trace ('Jamming_' + Timer_Jamming.currentCount);
 				// запуск таймера повтора
 				Timer_FastInput.start();
 			} 
 		}
 		
+		
+		
+		/*********************************************
+		 *            Отпускание  кнопок             *
+		 *                                           *
+		 */ //****************************************
+		public function func_all_Buttons_UP(event:Event):void {
+			
+			Timer_Jamming.reset();
+			Timer_FastInput.reset();
+			button_flag = '';
+		}
+		
+
+		
 		/*********************************************
 		 *          Таймер быстрого ввода            *
 		 *                                           *
 		 */ //****************************************
-		public function func_Timer_Jamming(event:TimerEvent):void {
+		public function func_Timer_FastInput(event:TimerEvent):void {
 			
 			// в зависимости от флага запуск диспатчера
+			trace ('FastInput_' + Timer_FastInput.currentCount);
 			switch (button_flag){ 
-			
-				case :
-					
+				case 'button_sync_up':
+					view.dispatchEvent(new Event(EventTypes.SYNC_UP_CLICK));
+				break;
+				case 'button_sync_down':
+					view.dispatchEvent(new Event(EventTypes.SYNC_DOWN_CLICK));
+				break;
+				case 'button_amp_up':
+					view.dispatchEvent(new Event(EventTypes.AMPL_UP_CLICK));
+				break;
+				case 'button_amp_down':
+					view.dispatchEvent(new Event(EventTypes.AMPL_DOWN_CLICK));
 				break;
 			}
-			
-			
-			
-			if (BUTTON_DOWN) button2.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
-			else if (BUTTON_UP) button3.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN)); 
 		}
 		
 		
@@ -220,6 +242,9 @@ package
 		 */ //****************************************
 		public function func_Sync_UP(event:Event):void {
 		
+			button_flag = 'button_sync_up';
+			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+			
 			if (menu_now == 'mode_akustika') {
 				menu_array[N].gain_val++;
 				if (menu_array[N].gain_val > 9) menu_array[N].gain_val = 9;
@@ -237,6 +262,9 @@ package
 		 */ //****************************************
 		public function func_Sync_DOWN(event:Event):void {
 		
+			button_flag = 'button_sync_down';
+			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
+			
 			if (menu_now == 'mode_akustika') {
 				menu_array[N].gain_val--;
 				if (menu_array[N].gain_val < 0) menu_array[N].gain_val = 0;
@@ -275,7 +303,10 @@ package
 		 */ //****************************************
 		public function func_Ampl_UP(event:Event):void {
 
+			button_flag = 'button_amp_up';
+			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
 			menu_array[N].gain++;
+			
 			if (menu_now == 'mode_akustika') {
 				if (menu_array[N].gain > Model.gainAcusticaConst.length - 1) menu_array[N].gain = Model.gainAcusticaConst.length - 1;
 			}
@@ -294,7 +325,10 @@ package
 		 */ //****************************************
 		public function func_Ampl_DOWN(event:Event):void {
 		
+			button_flag = 'button_amp_down';
+			view.addEventListener(EventTypes.BUTTON_MOUSE_OUT, func_all_Buttons_UP);
 			menu_array[N].gain--;
+			
 			if (menu_now == 'mode_akustika') {
 				if (menu_array[N].gain < 0) menu_array[N].gain = 0;
 			}

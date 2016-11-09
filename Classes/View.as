@@ -65,12 +65,14 @@ package
 			// слушатели отпускания кнопки
 			button_sync_up.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
 			button_sync_down.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_light.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_mode.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
 			button_amp_up.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_amp_down.addEventListener(MouseEvent.MOUSE_, functional_button_MOUSE_UP);
+			button_amp_down.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
 			
-			
+			// слушатели если при зажимании мышка съезжает с кнопки
+			button_sync_up.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
+			button_sync_down.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
+			button_amp_up.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
+			button_amp_down.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
 			
 			
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
@@ -153,9 +155,7 @@ package
 					dispatchEvent(new Event(EventTypes.AMPL_DOWN_CLICK));
 				break;
 			}
-			
-			dispatchEvent(new Event(EventTypes.JAMM_BUTTON));
-			trace ("event = " + event.target.name);
+			dispatchEvent(new Event(EventTypes.JAMM_BUTTON)); // зажимание любой кнопки
 		}
 		
 		
