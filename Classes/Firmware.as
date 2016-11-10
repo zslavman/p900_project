@@ -10,10 +10,9 @@ package
 	 * @author zslavman
 	 */
 	
-	//TODO: сделать наложение шума на мВ
-	//TODO: сделать случайную вариацию заряда батареи при включении
-	//TODO: сделать визуализацию подключение зарядки
+
 	//TODO: сделать окно About
+	//TODO: сделать визуализацию подключение зарядки
 	//TODO: сделать всплывающие подсказки
 	//TODO: поправить переключалку языка (съехал текст)
 	
@@ -48,6 +47,8 @@ package
 		private var min_noise:Number = 0.001;
 		private var max_noise:Number = 0.002;
 		private var show_coefficient:Boolean = false;// флаг показать коэф.
+		private var charge_frame:uint = 1;
+
 		
 
 		
@@ -70,16 +71,23 @@ package
 			// слушатель на зажимание кнопок
 			view.addEventListener(EventTypes.JAMM_BUTTON, func_all_Buttons_DOWN);
 			
-					
+
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
 			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
 			Timer_Jamming.addEventListener(TimerEvent.TIMER, func_Timer_Jamming);
 			Timer_FastInput.addEventListener(TimerEvent.TIMER, func_Timer_FastInput);
 			Timer_Noise.addEventListener(TimerEvent.TIMER, func_Timer_Noise);
-			view.container.battery_indication.visible = false;
 			view.container.visible = true;
 			
+			
+			// определения кадра отображения батареи в зависимости от числа заряда
+			charge_frame = view.container.battery_indication.totalFrames - Math.round(model.charge_level / 20);
+			//trace ("view.container.battery_indication.totalFrames = " + view.container.battery_indication.totalFrames);
+			//trace ("charge_frame = " + charge_frame);
+			
+			view.container.battery_indication.gotoAndStop(charge_frame);
+			view.container.battery_indication.visible = false;
 
 			// объекты в которых храняться текущие настройки выбранного режима
 			mode_filter1024.id = 'mode_filter1024';
@@ -224,13 +232,13 @@ package
 			else if (Timer_LoadingFwr.currentCount == loading_duration) {
  
 				view.container.battery_indication.visible = true;
+				
 				Screen_init();
 			
 				Timer_LoadingFwr.reset();
 				show_coefficient = false;
 				model.loading_ready = true;
 			}
-			trace ("Timer_LoadingFwr.currentCount = " + Timer_LoadingFwr.currentCount);
 		}
 		
 		
@@ -292,7 +300,6 @@ package
 			if (show_coefficient) {
 				show_coefficient = false;
 				Timer_LoadingFwr.start();
-				trace('жопа');
 			}
 			
 		}

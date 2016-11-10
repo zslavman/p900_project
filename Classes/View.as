@@ -200,9 +200,6 @@ package
 			zaryad.text = langArr[13][LANG]; // Заряд.
 			input.text = langArr[14][LANG]; // Вход.
 	
-			// экран
-			
-		
 		}
 		
 	

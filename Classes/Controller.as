@@ -26,7 +26,10 @@ package
 		private var offset:Number;
 		private var rotate_limit:Number = 150;// лимит поворота ручки контраст в градусах
 		private var final_rotation:Number = 0;
-
+		
+		private var charge_min:int = 21; // пределы заряда в процентах
+		private var charge_max:int = 100;
+		
 		
 		
 		
@@ -42,9 +45,10 @@ package
 			view.addEventListener(EventTypes.LIGHT_CLICK, Light);
 			view.addEventListener(EventTypes.CONTRAST_MOUSE_DOWN, ContrastMouseDown);
 			
+			var charge:int = RAND(charge_min, charge_max);
+			model.charge_level = charge;
+			trace ("charge = " + charge);
 			//addEventListener(Event.ENTER_FRAME, testing);
-			
-			//Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 		}
 		
 		
@@ -53,7 +57,7 @@ package
 		
 		public function testing(e:Event):void {
 			
-			trace ("loading_ready = " + model.loading_ready);
+			//trace ("loading_ready = " + model.loading_ready);
 		}
 		
 		
@@ -208,7 +212,12 @@ package
 		}
 		
 		
+		// рандомайзер
+		public function RAND(min:Number, max:Number): int {
 
+			var arg: Number = (max - min) * Math.random() + min;
+			return arg;
+		}
 		
 		
 		

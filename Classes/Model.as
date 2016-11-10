@@ -17,6 +17,7 @@ package
 		private var _LIGHT_ON:Boolean = false;
 		private var _ScreenALPHA:Number = 0;
 		private var _loading_ready:Boolean = false;
+		private var _charge_level:int; // число заряда батареи (от 20 до 100), вычисляется после загрузки Controller.as
 		
 
 		
@@ -98,6 +99,14 @@ package
 		}
 		public function set loading_ready(value:Boolean):void {
 			_loading_ready = value;
+		}
+		
+		
+		public function get charge_level():int {
+			return _charge_level;
+		}
+		public function set charge_level(value:int):void {
+			_charge_level = value;
 		}
 
 	}
