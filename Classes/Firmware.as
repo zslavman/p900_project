@@ -14,9 +14,6 @@ package
 	//TODO: сделать окно About
 	//TODO: сделать визуализацию подключение зарядки
 	//TODO: сделать всплывающие подсказки
-	//TODO: поправить переключалку языка (съехал текст)
-	
-	
 	 
 	 
 	 
@@ -30,7 +27,7 @@ package
 		private var Timer_LoadingFwr:Timer = new Timer(250);
 		private var Timer_Miganie:Timer = new Timer(200);
 		private var Timer_Jamming:Timer = new Timer(100);
-		private var Timer_FastInput:Timer = new Timer(100);
+		private var Timer_FastInput:Timer = new Timer(80);
 		private var Timer_Noise:Timer = new Timer(1500);
 		
 		private var count_mig:uint = 0; // счетчик для управл. миганием
@@ -152,7 +149,7 @@ package
 		 */ //****************************************
 		public function func_Timer_Jamming(event:TimerEvent):void {
 			
-			if (Timer_Jamming.currentCount == 8) {
+			if (Timer_Jamming.currentCount == 4) {
 				Timer_Jamming.reset();
 				//trace ('Jamming_' + Timer_Jamming.currentCount);
 				// запуск таймера повтора
