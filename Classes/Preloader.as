@@ -12,8 +12,8 @@ package
 	import flash.events.MouseEvent;
 	
 	import flash.events.KeyboardEvent;
-	import flash.display.Stage;
 	import flash.system.Capabilities;
+	import flash.display.Stage;
 	
 	//import com.google.analytics.AnalyticsTracker;
 	//import com.google.analytics.GATracker;
@@ -68,6 +68,11 @@ package
 			
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
+			stage.addEventListener(Event.RESIZE, resizeListener);
+
+			//stage.scaleMode = StageScaleMode.NO_SCALE;
+			//stage.align = StageAlign.TOP_LEFT;
+			
 
 			
 			// вывод на сцену индикации загрузки
@@ -114,6 +119,14 @@ package
 		private function ioError(e:IOErrorEvent):void { 
 			trace(e.text);
 		}
+		
+		
+		
+		
+		public function resizeListener (event:Event):void { 
+			trace("stageWidth: " + stage.stageWidth + " stageHeight: " + stage.stageHeight);
+		}
+		
 		
 		
 		

@@ -3,8 +3,14 @@ package
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.*;
 	import flash.media.Sound;
+	
+	import flash.events.TextEvent;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
+	import flash.text.*;
 	
 	
 	
@@ -25,11 +31,21 @@ package
 		
 		
 		private var langArr:Array;
+		
 		private var role_tween1:Tween;
 		private var role_start_y:Number;
 		private var role_finish_y:Number;
+		
+		private var logo_shiner:Tween;
+		private var shine_start_x:Number;
+		private var shine_finish_x:Number;
+		private var shine_duration:Number = 1; // скорость пробегания полосы по логотипу
+		
 		private var click_sound1:Sound = new _click_sound1();
 		private var click_robot_202:Sound = new _click_robot_202();
+		
+		
+		private var mailCSS:StyleSheet = new StyleSheet();
 		
 		
 	
@@ -40,6 +56,9 @@ package
 			controller = _controller;
 			langArr = Model.langArr;
 			
+			logo.addEventListener(MouseEvent.MOUSE_DOWN, logo_MOUSE_DOWN);
+			logo.buttonMode = true;
+			logo.mouseChildren = false;
 			ok_button.addEventListener(MouseEvent.MOUSE_DOWN, ok_button_MOUSE_DOWN);
 			ok_button.buttonMode = true;
 			ok_button.mouseChildren = false;
@@ -51,15 +70,66 @@ package
 			lang_line.mouseChildren = false;
 			
 			role_start_y = lang_line.y;
-			role_finish_y = lang_line.y + 43;//43
+			role_finish_y = lang_line.y + 43;
+			
+			shine_start_x = logo.shine_line.x;
+			shine_finish_x = logo.shine_line.x + 200;
 			
 			LangTween('pre');
-			//FillTextFields();
+			
+			// запуск твина анииации блеска логотипа
+			startShine();
+			
+			// линка с почтой:
+			mailCSS.setStyle("a:link", {color:'#FFFFFF', textDecoration:'none'}); // 0000CC
+			mailCSS.setStyle("a:hover", {color:'#B4FAF9', textDecoration:'underline'}); // 0000FF
+			
+			author.styleSheet = mailCSS;
+			author.addEventListener(TextEvent.LINK, linkHandler); // слушатель линка в тексте
+			
+			FillTextFields();
 		
 		}
 		
 		
+		/*********************************************
+		 *              Анимация логотипа            *
+		 *                                           *
+		 *///*****************************************
+		public function ifShineFinish(event:TweenEvent):void {
+			
+			logo_shiner.removeEventListener(TweenEvent.MOTION_FINISH, ifShineFinish);
+			startShine();
+		}
+		public function startShine():void {
 		
+			logo_shiner = new Tween (logo.shine_line, "x", None.easeOut, shine_start_x, shine_finish_x, shine_duration, true);
+			logo_shiner.addEventListener(TweenEvent.MOTION_FINISH, ifShineFinish);
+		}
+		
+		
+		/*********************************************
+		 *              Клик по логотипу             *
+		 *                                           *
+		 *///*****************************************
+		public function logo_MOUSE_DOWN(event:MouseEvent):void { 
+			
+		}
+		
+		
+		
+		
+		/*********************************************
+		 *                 Л и н к и                 *
+		 *                                           *
+		 */ //****************************************
+		public function linkHandler(linkEvent:TextEvent):void {
+			
+			if (linkEvent.text == "myMail") {
+				var myRequest:URLRequest = new URLRequest(langArr[236][model.LANG]);
+				navigateToURL(myRequest);
+			}
+		}
 		
 		
 		
@@ -70,7 +140,13 @@ package
 		 *///*****************************************
 		public function FillTextFields():void {
 			
+			var LANG:uint = model.LANG; 
 			
+			h1.text = langArr[23][LANG] + langArr[3][LANG] + langArr[24][LANG]; 
+			ui_lang.text = langArr[25][LANG];
+			ui_lang_value.text = langArr[26][LANG];
+			designed_to.text = langArr[27][LANG];
+			author.text = langArr[28][LANG];
 		}
 		
 		

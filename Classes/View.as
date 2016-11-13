@@ -65,7 +65,9 @@ package
 			button_mode.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
 			
 			
+			STAGE.addEventListener(Event.RESIZE, resizeListener); 
 			
+
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
 			STAGE.addEventListener(MouseEvent.MOUSE_MOVE, contrast_handle_MOUSE_MOVE);
 			STAGE.addEventListener(MouseEvent.MOUSE_UP, contrast_handle_MOUSE_UP);
@@ -81,7 +83,9 @@ package
 		
 		
 
-		
+		public function resizeListener (event:Event):void { 
+			trace("stageWidth: " + STAGE.stageWidth + " stageHeight: " + STAGE.stageHeight);
+		}
 
 		
 		
