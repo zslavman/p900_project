@@ -1,5 +1,6 @@
 package
 {
+	import About_Window;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -7,6 +8,7 @@ package
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	import flash.filters.BlurFilter;
 	
 	/**
 	 * ...
@@ -19,7 +21,11 @@ package
 		
 		private var model:Model;
 		private var view:View;
+		private var controller:Controller;
+		
+		
 		private var firmware:Firmware;
+		private var about_window:About_Window;
 		
 		
 		private var langArr:Array = [];
@@ -30,6 +36,10 @@ package
 		private var charge_min:int = 21; // пределы заряда в процентах
 		private var charge_max:int = 100;
 		
+		private var DisplayObjects:Array = []; // массив дисплейобъектов которые нужно блюрить
+		private var blurFilter:BlurFilter;
+		
+		
 		
 		
 		
@@ -37,10 +47,14 @@ package
 		
 		public function Controller(_view:View, _model:Model) {
 			
+			controller = this;
 			view = _view;
 			model = _model;
 			langArr = Model.langArr;
-			view.addEventListener(EventTypes.LANG_CLICK, Language);
+			
+			DisplayObjects = [view];
+			
+			view.addEventListener(EventTypes.INFO_CLICK, ShowInfo);
 			view.addEventListener(EventTypes.POWER_CLICK, Power);
 			view.addEventListener(EventTypes.LIGHT_CLICK, Light);
 			view.addEventListener(EventTypes.CONTRAST_MOUSE_DOWN, ContrastMouseDown);
@@ -160,21 +174,35 @@ package
 		
 		
 		
+
+		
+		
 		/*********************************************
-		 *              Кнопка "LANG"                *
+		 *              Кнопка "Info"                *
 		 *                                           *
 		 */ //****************************************
-		public function Language(e:Event):void{ 
-        
-			model.LANG++;
-			if (model.LANG > 1) model.LANG = 0;
+		public function ShowInfo(e:Event):void {
 			
-			view.FillTextFields();
-			view.LangTween();
-			if (firmware != null && model.loading_ready) {
-				firmware.Screen_init();
+			if (about_window == null) {	
+				about_window = new About_Window(model, controller);
+				addChild(about_window); // только в отображаемый класс можно добавлять чайлд
+				Blur('forward');
 			}
-        }
+		}
+		
+		public function RemoveAboutWindow():void {
+		
+			if (about_window != null) {
+				removeChild(about_window);
+				about_window = null;
+				Blur('revers');
+			}
+		}
+		
+		
+		
+		
+		
 		
 		
 		/*********************************************
@@ -210,6 +238,47 @@ package
 				}
 			}
 		}
+		
+		
+		public function SetText():void {
+		
+			view.FillTextFields();
+			if (firmware != null && model.loading_ready) {
+				firmware.Screen_init();
+			}
+		}
+		
+		
+		
+		public function Blur(direction:String):void {
+			
+			// прямое направление
+			if (direction == 'forward') {
+				
+				blurFilter = new BlurFilter();
+				blurFilter.blurX = blurFilter.blurY = 16;
+				blurFilter.quality = 3;
+				
+				// наложение фильтров на каждый элемент массива
+				for (var i:int = 0; i < DisplayObjects.length; i++) {
+					DisplayObjects[i].filters = [blurFilter];
+				}
+				// не размывать окно About
+				about_window.filters = null;
+				//model_show_Tween = new Tween (about_window, "alpha", Strong.easeOut, 0, 1, 1, true); 
+			}
+			
+			
+			// обратное направление
+			else if (direction == 'revers') {
+
+				// снятие фильтров
+				for (var j:int = 0; j < DisplayObjects.length; j++) {
+					DisplayObjects[j].filters = null;
+				}
+			}
+		}
+		
 		
 		
 		// рандомайзер

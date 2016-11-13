@@ -9,7 +9,7 @@ package
 		
 		
 		
-		public static const LANG_CLICK:String = "langClick";
+		public static const INFO_CLICK:String = "infoClick";
 		public static const POWER_CLICK:String = "powerClick";
 		
 		public static const CONTRAST_MOUSE_DOWN:String = "contrastMouseDown";
