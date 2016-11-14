@@ -2,6 +2,7 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.events.Event;
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.*;
@@ -69,6 +70,8 @@ package
 			lang_line.mouseEnabled = false;
 			lang_line.mouseChildren = false;
 			
+			addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
+			
 			role_start_y = lang_line.y;
 			role_finish_y = lang_line.y + 43;
 			
@@ -90,6 +93,24 @@ package
 			FillTextFields();
 		
 		}
+		
+		
+		
+		
+		/*********************************************
+		 *              Ecc / Enter             *
+		 *                                           *
+		 */ //****************************************
+		public function Key_Esc_or_Enter(event:Event):void {
+		
+			//ok_button.dispatchEvent(new Event(MouseEvent.MOUSE_DOWN));
+			trace ("abu-abu");
+		}
+		
+		
+		
+		
+		
 		
 		
 		/*********************************************
@@ -114,6 +135,8 @@ package
 		 *///*****************************************
 		public function logo_MOUSE_DOWN(event:MouseEvent):void { 
 			
+			var request: URLRequest = new URLRequest(langArr[35][model.LANG]);
+			navigateToURL(request);
 		}
 		
 		
@@ -126,7 +149,7 @@ package
 		public function linkHandler(linkEvent:TextEvent):void {
 			
 			if (linkEvent.text == "myMail") {
-				var myRequest:URLRequest = new URLRequest(langArr[236][model.LANG]);
+				var myRequest:URLRequest = new URLRequest(langArr[29][model.LANG]);
 				navigateToURL(myRequest);
 			}
 		}
@@ -147,6 +170,17 @@ package
 			ui_lang_value.text = langArr[26][LANG];
 			designed_to.text = langArr[27][LANG];
 			author.text = langArr[28][LANG];
+			
+			//шильдик
+			shildik.factory_name.text = langArr[30][LANG];
+			shildik.p900.text = langArr[3][LANG];
+			shildik.voltage.text = langArr[31][LANG];
+			shildik.power.text = langArr[32][LANG];
+			shildik.serial.text = langArr[33][LANG];
+			shildik.made.text = langArr[34][LANG];
+			if (LANG == 1) shildik.DC_symbol.x = -80;
+			else if (LANG == 0) shildik.DC_symbol.x = -135;
+			
 		}
 		
 		

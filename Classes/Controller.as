@@ -181,7 +181,7 @@ package
 		 *              Кнопка "Info"                *
 		 *                                           *
 		 */ //****************************************
-		public function ShowInfo(e:Event):void {
+		public function ShowInfo(event:Event):void {
 			
 			if (about_window == null) {	
 				about_window = new About_Window(model, controller);
@@ -209,7 +209,7 @@ package
 		 *           Тумблер "ВКЛ./ВЫКЛ"             *
 		 *                                           *
 		 */ //****************************************
-		public function Power(e:Event):void {
+		public function Power(event:Event):void {
 		
 			// включение
 			if (!model.TURNED_ON) {

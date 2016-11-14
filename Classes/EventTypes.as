@@ -28,6 +28,9 @@ package
 		public static const UNJAMM_BUTTON:String = "unJammButton";
 		public static const BUTTON_MOUSE_OUT:String = "outButton";
 		
+		public static const KEY_ESC_ENTER:String = "escORenter";
+		public static const KEY_F1:String = "f1Help";
+		
 		
 		
 

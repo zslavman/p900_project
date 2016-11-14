@@ -57,6 +57,12 @@ package
 			langArr[28] = ['Разработано для KEP Power Testing Ltd., \r © Вячеслав Зинько, 2016 г. \r <a href="event:myMail">v.zinko@kep.ua</a>', 'Designed for KEP Power Testing Ltd. \r © Viacheslav Zinko, 2016 \r <a href="event:myMail">v.zinko@kep.ua</a>'];
 			//langArr[236] = ["mailto:zslavman@gmail.com", "mailto:zslavman@gmail.com"];
 			langArr[29] = ["mailto:v.zinko@kep.ua", "mailto:v.zinko@kep.ua"];
+			langArr[30] = ["ХАРЬКОВЭНЕРГОПРИБОР", "KharkovEnergoPribor"];
+			langArr[31] = ["Питание:   12В", "Power supply:   12V"];
+			langArr[32] = ["Потр. мощность, не более: 6 Вт", "Power consumption: 6W max"];
+			langArr[33] = ["Зав. №: 1234    Изготовлено: 2016", "Serial: #1234    Manufactured: 2016"];
+			langArr[34] = ["Сделано в Украине", "Made in Ukraine"];
+			langArr[35] = ["http://www.kep.ua/ru/", "http://www.kep.ua/en/"];
 			
 			
 			
