@@ -61,6 +61,10 @@ package
 			
 			view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
 			
+			view.charging_target.addEventListener(EventTypes.TARGET_OVER, charge_Over);
+			view.charging_target.addEventListener(EventTypes.TARGET_OUT, charge_Out);
+			view.charging_target.addEventListener(EventTypes.TARGET_CLICK, charge_MOUSE_DOWN);
+			
 			var charge:int = RAND(charge_min, charge_max);
 			model.charge_level = charge;
 			trace ("charge = " + charge);
@@ -76,6 +80,37 @@ package
 		}
 		
 		
+		
+		
+		
+		/*********************************************
+		 *         Наведение мыши на зарядку         *
+		 *                                           *
+		 */ //****************************************
+		public function charge_Over(event:Event):void {
+			
+			view.charging_plug.visible = true;
+		}
+		
+		/*********************************************
+		 *         Уведение мыши с зарядки           *
+		 *                                           *
+		 */ //****************************************
+		public function charge_Out(event:Event):void {
+			
+			view.charging_plug.visible = false;			
+		}
+		
+		/*********************************************
+		 *         Нажимение на гнездо зарядки       *
+		 *                                           *
+		 */ //****************************************
+		public function charge_MOUSE_DOWN(event:Event):void {
+			
+			view.charging_plug.visible = false;
+			view.charging_pluged.visible = true;
+			trace('sdfgegf');
+		}
 		
 
 		

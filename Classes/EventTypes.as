@@ -29,7 +29,11 @@ package
 		public static const BUTTON_MOUSE_OUT:String = "outButton";
 		
 		public static const KEY_ESC_ENTER:String = "escORenter";
-		public static const KEY_F1:String = "f1Help";
+		//public static const KEY_F1:String = "f1Help";
+		
+		public static const TARGET_OVER:String = "mouseOver";
+		public static const TARGET_OUT:String = "mouseOut";
+		public static const TARGET_CLICK:String = "targetClick";
 		
 		
 		

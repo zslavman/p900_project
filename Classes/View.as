@@ -69,6 +69,11 @@ package
 			//STAGE.addEventListener(Event.RESIZE, resizeListener); 
 			STAGE.addEventListener(KeyboardEvent.KEY_DOWN, Key_DOWN);
 			
+			charging_target.addEventListener(MouseEvent.MOUSE_OVER, charging_target_MOUSE_OVER);
+			charging_target.addEventListener(MouseEvent.MOUSE_OUT, charging_target_MOUSE_OUT);
+			charging_target.addEventListener(MouseEvent.MOUSE_DOWN, charging_target_MOUSE_DOWN);
+			charging_target.buttonMode = true;
+			
 
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
 			STAGE.addEventListener(MouseEvent.MOUSE_MOVE, contrast_handle_MOUSE_MOVE);
@@ -80,15 +85,31 @@ package
 			LCD.contrastMax_scr.alpha = 0.03; // видимость клеточек по умолчанию, не более 0.04
 			container.visible = false;
 			
+			charging_plug.mouseEnabled = false;
+			charging_plug.visible = false;
+			
+			charging_pluged.mouseEnabled = false;
+			charging_pluged.visible = false;
+			
 			FillTextFields();
 		}
 		
 		
 
-		public function resizeListener (event:Event):void { 
-			trace("stageWidth: " + STAGE.stageWidth + " stageHeight: " + STAGE.stageHeight);
+		// мышка над разъемом зарядки
+		public function charging_target_MOUSE_OVER(event:MouseEvent):void {
+			dispatchEvent(new Event(EventTypes.TARGET_OVER));
 		}
-
+		// мышка покинула разъем зарядки
+		public function charging_target_MOUSE_OUT(event:MouseEvent):void {
+			dispatchEvent(new Event(EventTypes.TARGET_OUT));
+		}
+		// клик по разъему зарядки
+		public function charging_target_MOUSE_DOWN(event:MouseEvent):void {
+			dispatchEvent(new Event(EventTypes.TARGET_CLICK));
+		}
+		
+		
 		
 		
 		// ручка контраста
@@ -170,7 +191,7 @@ package
 			}
 			
 			if (event.keyCode == 112) { // нажатие "F1"
-				dispatchEvent(new Event(EventTypes.KEY_F1));
+				//dispatchEvent(new Event(EventTypes.KEY_F1));
 			}
 		}
 		
