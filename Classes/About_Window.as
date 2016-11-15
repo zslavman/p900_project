@@ -70,7 +70,7 @@ package
 			lang_line.mouseEnabled = false;
 			lang_line.mouseChildren = false;
 			
-			addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
+			//view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
 			
 			role_start_y = lang_line.y;
 			role_finish_y = lang_line.y + 43;
@@ -97,20 +97,8 @@ package
 		
 		
 		
-		/*********************************************
-		 *              Ecc / Enter             *
-		 *                                           *
-		 */ //****************************************
-		public function Key_Esc_or_Enter(event:Event):void {
-		
-			//ok_button.dispatchEvent(new Event(MouseEvent.MOUSE_DOWN));
-			trace ("abu-abu");
-		}
-		
-		
-		
-		
-		
+
+
 		
 		
 		/*********************************************

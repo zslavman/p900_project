@@ -166,13 +166,10 @@ package
 		public	function Key_DOWN(event:KeyboardEvent) {
 
 			if (event.keyCode == 27 || event.keyCode == 13) { // клавиша "Esc" или "Enter"
-				//mainClass.about_window.ok_button.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 				dispatchEvent(new Event(EventTypes.KEY_ESC_ENTER));
-				trace ("Key_DOWN");
 			}
 			
 			if (event.keyCode == 112) { // нажатие "F1"
-				//mainClass.info.about_button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 				dispatchEvent(new Event(EventTypes.KEY_F1));
 			}
 		}

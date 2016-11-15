@@ -14,6 +14,8 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.system.Capabilities;
 	import flash.display.Stage;
+	import flash.display.StageAlign; 
+	import flash.display.StageScaleMode;
 	
 	//import com.google.analytics.AnalyticsTracker;
 	//import com.google.analytics.GATracker;
@@ -25,15 +27,10 @@ package
 	 * @author zslavman
 	 */
 	public class Preloader extends MovieClip{ 
-	
-
-		//public static var STAGE:Stage;
 		
 		private var model_data:Model;
 		private var view:View;
 		private var controller:Controller;
-		
-		
 		
 		
 		private var preVisual:PreloaderVisual;
@@ -68,10 +65,10 @@ package
 			
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
-			stage.addEventListener(Event.RESIZE, resizeListener);
-
+			
+			//stage.addEventListener(Event.RESIZE, resizeListener);
 			//stage.scaleMode = StageScaleMode.NO_SCALE;
-			//stage.align = StageAlign.TOP_LEFT;
+			//stage.align = StageAlign.TOP;
 			
 
 			
@@ -123,9 +120,9 @@ package
 		
 		
 		
-		public function resizeListener (event:Event):void { 
-			trace("stageWidth: " + stage.stageWidth + " stageHeight: " + stage.stageHeight);
-		}
+		//public function resizeListener (event:Event):void { 
+			//trace("stageWidth: " + stage.stageWidth + " stageHeight: " + stage.stageHeight);
+		//}
 		
 		
 		

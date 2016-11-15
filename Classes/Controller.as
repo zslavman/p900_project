@@ -59,12 +59,13 @@ package
 			view.addEventListener(EventTypes.LIGHT_CLICK, Light);
 			view.addEventListener(EventTypes.CONTRAST_MOUSE_DOWN, ContrastMouseDown);
 			
+			view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
+			
 			var charge:int = RAND(charge_min, charge_max);
 			model.charge_level = charge;
 			trace ("charge = " + charge);
 			//addEventListener(Event.ENTER_FRAME, testing);
 		}
-		
 		
 		
 		
@@ -75,6 +76,21 @@ package
 		}
 		
 		
+		
+
+		
+		
+		
+		/*********************************************
+		 *              Ecc / Enter                  *
+		 *                                           *
+		 */ //****************************************
+		public function Key_Esc_or_Enter(event:Event):void {
+		
+			if (about_window != null) {
+			about_window.ok_button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+			}
+		}
 		
 		
 
@@ -199,7 +215,7 @@ package
 			}
 		}
 		
-		
+	
 		
 		
 		
