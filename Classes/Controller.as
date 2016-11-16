@@ -1,6 +1,10 @@
 package
 {
 	import About_Window;
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
+	import fl.transitions.easing.*;
+		
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -39,7 +43,10 @@ package
 		private var DisplayObjects:Array = []; // массив дисплейобъектов которые нужно блюрить
 		private var blurFilter:BlurFilter;
 		
-		
+		private var opacity_tween:Tween;
+		private var moveX_tween:Tween;
+		private var moveY_tween:Tween;
+		private var opacity_dur:Number = 0.25;
 		
 		
 		
@@ -61,9 +68,11 @@ package
 			
 			view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
 			
-			view.charging_target.addEventListener(EventTypes.TARGET_OVER, charge_Over);
+			//для событий OVER, OUT нужно указывать конкретную цель
+			view.charging_target.addEventListener(EventTypes.TARGET_OVER, charge_Over); 
 			view.charging_target.addEventListener(EventTypes.TARGET_OUT, charge_Out);
-			view.charging_target.addEventListener(EventTypes.TARGET_CLICK, charge_MOUSE_DOWN);
+			
+			view.addEventListener(EventTypes.TARGET_CLICK, charge_MOUSE_DOWN);
 			
 			var charge:int = RAND(charge_min, charge_max);
 			model.charge_level = charge;
@@ -88,32 +97,40 @@ package
 		 *                                           *
 		 */ //****************************************
 		public function charge_Over(event:Event):void {
-			
-			view.charging_plug.visible = true;
+			if (!model.charge_connected) {
+				Opacity();
+			}
 		}
-		
-		/*********************************************
-		 *         Уведение мыши с зарядки           *
-		 *                                           *
-		 */ //****************************************
 		public function charge_Out(event:Event):void {
-			
-			view.charging_plug.visible = false;			
+			allTweenStop();
+			view.charging_plug.alpha = 0;
 		}
-		
-		/*********************************************
-		 *         Нажимение на гнездо зарядки       *
-		 *                                           *
-		 */ //****************************************
 		public function charge_MOUSE_DOWN(event:Event):void {
 			
-			view.charging_plug.visible = false;
-			view.charging_pluged.visible = true;
-			trace('sdfgegf');
+			if (model.charge_connected) {
+				Opacity();
+				view.charging_pluged.visible = false;
+				model.charge_connected = false;
+			}
+			else if (!model.charge_connected){
+				allTweenStop()
+				view.charging_plug.alpha = 0;
+				view.charging_pluged.visible = true;
+				model.charge_connected = true;
+			}
 		}
 		
 
-		
+		public function Opacity():void {
+			opacity_tween = new Tween (view.charging_plug, "alpha", None.easeOut, 0, 0.6, opacity_dur, true);
+			moveX_tween = new Tween (view.charging_plug, "x", Strong.easeOut, 1034, 1006, opacity_dur, true);
+			moveY_tween = new Tween (view.charging_plug, "y", Strong.easeOut, 340, 372, opacity_dur, true);
+		}
+		public function allTweenStop():void {
+			opacity_tween.stop();
+			moveX_tween.stop();
+			moveY_tween.stop();
+		}
 		
 		
 		/*********************************************

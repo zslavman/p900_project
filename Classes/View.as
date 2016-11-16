@@ -21,6 +21,8 @@ package
 
 		private var power_sound:Sound = new _power_sound();
 		private var click_robot_202:Sound = new _click_robot_202();
+		private var charger_in:Sound = new _charger_in();
+		private var charger_out:Sound = new _charger_out();
 		private var langArr:Array = [];
 		
 
@@ -69,10 +71,12 @@ package
 			//STAGE.addEventListener(Event.RESIZE, resizeListener); 
 			STAGE.addEventListener(KeyboardEvent.KEY_DOWN, Key_DOWN);
 			
+			charging_target.addEventListener(MouseEvent.MOUSE_DOWN, charging_target_MOUSE_DOWN);
 			charging_target.addEventListener(MouseEvent.MOUSE_OVER, charging_target_MOUSE_OVER);
 			charging_target.addEventListener(MouseEvent.MOUSE_OUT, charging_target_MOUSE_OUT);
-			charging_target.addEventListener(MouseEvent.MOUSE_DOWN, charging_target_MOUSE_DOWN);
 			charging_target.buttonMode = true;
+			//charging_target.mouseChildren = false;
+			//charging_target.mouseEnabled = true;
 			
 
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
@@ -86,7 +90,8 @@ package
 			container.visible = false;
 			
 			charging_plug.mouseEnabled = false;
-			charging_plug.visible = false;
+			charging_plug.alpha = 0;
+			//charging_plug.visible = false;
 			
 			charging_pluged.mouseEnabled = false;
 			charging_pluged.visible = false;
@@ -100,13 +105,13 @@ package
 		public function charging_target_MOUSE_OVER(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.TARGET_OVER));
 		}
-		// мышка покинула разъем зарядки
 		public function charging_target_MOUSE_OUT(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.TARGET_OUT));
 		}
-		// клик по разъему зарядки
 		public function charging_target_MOUSE_DOWN(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.TARGET_CLICK));
+			if (!model.charge_connected) charger_out.play();
+			else if (model.charge_connected) charger_in.play();
 		}
 		
 		
@@ -114,7 +119,6 @@ package
 		
 		// ручка контраста
 		public function contrast_handle_MOUSE_DOWN(event:MouseEvent):void {
-			//click_sound1.play();
 			dispatchEvent(new Event(EventTypes.CONTRAST_MOUSE_DOWN));
 		}
 		public function contrast_handle_MOUSE_MOVE(event:MouseEvent):void {
