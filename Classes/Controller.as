@@ -147,6 +147,7 @@ package
 			if (about_window != null) {
 			about_window.ok_button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 			}
+			else view.dispatchEvent(new Event (EventTypes.INFO_CLICK));
 		}
 		
 		
