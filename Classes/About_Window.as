@@ -40,7 +40,7 @@ package
 		private var logo_shiner:Tween;
 		private var shine_start_x:Number;
 		private var shine_finish_x:Number;
-		private var shine_duration:Number = 1; // скорость пробегания полосы по логотипу
+		private var shine_duration:Number = 2; // скорость пробегания полосы по логотипу
 		
 		private var click_sound1:Sound = new _click_sound1();
 		private var click_robot_202:Sound = new _click_robot_202();

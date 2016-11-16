@@ -49,6 +49,7 @@ package
 			langArr[20] = ["+S", "+S"];
 			langArr[21] = ["-S", "-S"];
 			langArr[22] = ["32768$", "32768$"];
+			langArr[36] = ["    Зарядка", "    Charging"];
 			
 			langArr[23] = ["Окно справки симулятора ", "Simulator help window "];
 			langArr[24] = [" v.2.0", " v.2.0"];
@@ -64,6 +65,8 @@ package
 			langArr[33] = ["Зав. №: 1234    Изготовлено: 2016", "Serial: #1234    Manufactured: 2016"];
 			langArr[34] = ["Сделано в Украине", "Made in Ukraine"];
 			langArr[35] = ["http://www.kep.ua/ru/", "http://www.kep.ua/en/"];
+			
+			//langArr[36] = ["", ""]; занято!!!
 			
 			
 			

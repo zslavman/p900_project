@@ -4,14 +4,11 @@ package
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.*;
-		
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.Event;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	import flash.filters.BlurFilter;
 	
 	/**
@@ -47,8 +44,8 @@ package
 		private var moveX_tween:Tween;
 		private var moveY_tween:Tween;
 		private var opacity_dur:Number = 0.25;
-		
-		
+
+
 		
 		
 		
@@ -107,16 +104,24 @@ package
 		}
 		public function charge_MOUSE_DOWN(event:Event):void {
 			
+			// вынимание зарядки
 			if (model.charge_connected) {
-				Opacity();
+				//Opacity();
 				view.charging_pluged.visible = false;
 				model.charge_connected = false;
+				if (firmware && model.loading_ready) {
+					firmware.Screen_init();
+					firmware.Timer_Deviation.reset();// если вынимать сразу же после вставляния
+					firmware.pre_charge_num = 0;
+				}
 			}
+			// подключение зарядки
 			else if (!model.charge_connected){
-				allTweenStop()
+				allTweenStop();
 				view.charging_plug.alpha = 0;
 				view.charging_pluged.visible = true;
 				model.charge_connected = true;
+				if (firmware && model.loading_ready) firmware.Timer_Deviation.start();
 			}
 		}
 		
@@ -287,7 +292,7 @@ package
 				view.LCD.contrastMax_scr.visible = true;
 				
 				firmware = new Firmware(view, model);
-				view.dispatchEvent(new Event(EventTypes.LIGHT_CLICK));
+				//view.dispatchEvent(new Event(EventTypes.LIGHT_CLICK));
 				
 			} 
 			
@@ -359,17 +364,5 @@ package
 		
 		
 		
-		
-
-		
-		
-		// обработка клавиатуры (если таковая будет имется)
-		public function key_Pressed(event:KeyboardEvent):void {
-		
-			//switch (event.keyCode){
-			//
-			//case Keyboard.LEFT:
-			//}
-		}
 	}
 }

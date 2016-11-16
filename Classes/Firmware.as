@@ -12,7 +12,6 @@ package
 	
 
 
-	//TODO: доделать визуализацию подключение зарядки
 	//TODO: сделать всплывающие подсказки
 	 
 	 
@@ -28,6 +27,7 @@ package
 		private var Timer_Jamming:Timer = new Timer(100);
 		private var Timer_FastInput:Timer = new Timer(80);
 		private var Timer_Noise:Timer = new Timer(1500);
+		public var Timer_Deviation:Timer = new Timer(200);
 		
 		private var count_mig:uint = 0; // счетчик для управл. миганием
 		private var loading_duration:uint = 8; //длительность загрузки 
@@ -44,6 +44,8 @@ package
 		private var max_noise:Number = 0.002;
 		private var show_coefficient:Boolean = false;// флаг показать коэф.
 		private var charge_frame:uint = 1;
+		
+		public var pre_charge_num:Number = 0; // переменная для девиации уровня зарада во время подключения зарядки
 
 		
 
@@ -75,6 +77,7 @@ package
 			Timer_FastInput.addEventListener(TimerEvent.TIMER, func_Timer_FastInput);
 			Timer_Noise.addEventListener(TimerEvent.TIMER, func_Timer_Noise);
 			view.container.visible = true;
+			Timer_Deviation.addEventListener(TimerEvent.TIMER, func_Timer_Deviation);
 			
 			
 			// определения кадра отображения батареи в зависимости от числа заряда
@@ -169,6 +172,36 @@ package
 			button_flag = '';
 		}
 		
+		
+		
+		/*********************************************
+		 *          Таймер девиации заряда           *
+		 *                                           *
+		 */ //****************************************
+		public function func_Timer_Deviation(event:TimerEvent):void {
+		
+			pre_charge_num += 13;
+			if (pre_charge_num >= model.charge_level) {
+				Timer_Deviation.reset();
+				pre_charge_num = model.charge_level;
+			}
+			Screen_init();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		
 		/*********************************************
@@ -197,12 +230,7 @@ package
 		
 		
 		
-		
-		
-		
-		
-		
-		
+
 		
 		
 		/*********************************************
@@ -234,6 +262,8 @@ package
 				Timer_LoadingFwr.reset();
 				show_coefficient = false;
 				model.loading_ready = true;
+				
+				if (model.charge_connected) Timer_Deviation.start();
 			}
 		}
 		
@@ -250,15 +280,17 @@ package
 			
 			if (count_mig == 8) {
 				view.LED_red.gotoAndStop('frame_on');
-				if (plus_minus_flag) {
-					view.container.s_plus_place.text = Model.langArr[20][model.LANG];
-					plus_minus_flag = false;
-				}
-				else {
-					view.container.s_plus_place.text = Model.langArr[21][model.LANG];
-					plus_minus_flag = true;
-				}
 				
+				if (!model.charge_connected){
+					if (plus_minus_flag) {
+						view.container.s_plus_place.text = Model.langArr[20][model.LANG]; // +S
+						plus_minus_flag = false;
+					}
+					else {
+						view.container.s_plus_place.text = Model.langArr[21][model.LANG]; // -S
+						plus_minus_flag = true;
+					}
+				}
 			}
 			if (count_mig == 10) {
 				view.LED_red.gotoAndStop('frame_off');
@@ -422,15 +454,25 @@ package
 			
 			Destroy_text();
 
-			if (menu_now == 'mode_akustika') {
-				view.container.line2.text = '×00' + menu_array[N].gain_val;
-				view.container.line1.text = menu_array[N].sync_value  + Model.langArr[18][model.LANG];
-				view.container.gain_place.text = '×' + Model.gainAcusticaConst[menu_array[N].gain];
+			if (!model.charge_connected) {
+				view.container.battery_indication.visible = true;
+				if (menu_now == 'mode_akustika') {
+					view.container.line2.text = '×00' + menu_array[N].gain_val;
+					view.container.line1.text = menu_array[N].sync_value  + Model.langArr[18][model.LANG];
+					view.container.gain_place.text = '×' + Model.gainAcusticaConst[menu_array[N].gain];
+				}
+				else {
+					view.container.line1.text = menu_array[N].name[model.LANG];
+					view.container.line2.text = menu_array[N].gain_val + Model.langArr[17][model.LANG];
+					view.container.gain_place.text = '×' + Model.gainFilterConst[menu_array[N].gain];
+				}
 			}
-			else {
-				view.container.line1.text = menu_array[N].name[model.LANG];
-				view.container.line2.text = menu_array[N].gain_val + Model.langArr[17][model.LANG];
-				view.container.gain_place.text = '×' + Model.gainFilterConst[menu_array[N].gain];
+			else if (model.charge_connected) {
+				view.container.battery_indication.visible = false;
+				view.container.line1.text = Model.langArr[36][model.LANG];	
+				if (String(model.charge_level).length == 2) view.container.line2.text = '      ' + '0' + pre_charge_num + '%';	
+				else view.container.line2.text = '      ' + pre_charge_num + '%';	
+				
 			}
 		}
 		
@@ -462,6 +504,7 @@ package
 			Timer_LoadingFwr.reset();
 			Timer_Noise.reset();
 			Timer_FastInput.reset();
+			Timer_Deviation.reset();
 			Miganie_Off();
 			view.container.visible = false;
 			Destroy_text();
