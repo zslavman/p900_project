@@ -7,6 +7,8 @@ package
 	import flash.events.Event
 	import flash.media.Sound;
 	
+	import flash.events.FocusEvent
+	
 	/**
 	 * ...
 	 * @author zslavman
@@ -75,8 +77,6 @@ package
 			charging_target.addEventListener(MouseEvent.MOUSE_OVER, charging_target_MOUSE_OVER);
 			charging_target.addEventListener(MouseEvent.MOUSE_OUT, charging_target_MOUSE_OUT);
 			charging_target.buttonMode = true;
-			//charging_target.mouseChildren = false;
-			//charging_target.mouseEnabled = true;
 			
 
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
@@ -91,13 +91,28 @@ package
 			
 			charging_plug.mouseEnabled = false;
 			charging_plug.alpha = 0;
-			//charging_plug.visible = false;
 			
 			charging_pluged.mouseEnabled = false;
 			charging_pluged.visible = false;
 			
 			FillTextFields();
+			
+			/*********************************************
+			 *          Проверки разного рода            *
+			 */ //****************************************
+			
+			
+			//addEventListener(Event.ENTER_FRAME, testing);
+			//STAGE.addEventListener(Event.ACTIVATE, act);
+			//STAGE.addEventListener(Event.DEACTIVATE, deact);
+			//STAGE.addEventListener(FocusEvent.FOCUS_IN, focusInHandler);
 		}
+		
+		
+
+		
+		
+		
 		
 		
 
@@ -202,11 +217,6 @@ package
 		
 		
 		
-		
-		
-		
-		
-		
 		/*********************************************
 		 *       Ф-ция заполнения текст. полей       *
 		 *                                           *
@@ -231,5 +241,27 @@ package
 			input.text = langArr[14][LANG]; // Вход.
 	
 		}
+		
+		
+		
+
+		//public function testing(e:Event):void {
+			//
+			////trace ("loading_ready = " + model.loading_ready);
+		//}
+		
+		//public function act(e:Event):void {
+			//
+			//trace ('activated_');
+		//}
+		//public function deact(e:Event):void {
+			//
+			//trace ('deactivated_');
+		//}
+		//
+		//public function focusInHandler(e:Event):void {
+			//
+			//trace ('target = ' + e.target.name);
+		//}
 	}
 }

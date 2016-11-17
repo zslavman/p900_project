@@ -71,6 +71,7 @@ package
 			//stage.align = StageAlign.TOP;
 			
 
+
 			
 			// вывод на сцену индикации загрузки
 			preVisual = new PreloaderVisual();

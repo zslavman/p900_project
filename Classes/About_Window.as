@@ -70,6 +70,10 @@ package
 			lang_line.mouseEnabled = false;
 			lang_line.mouseChildren = false;
 			
+			tips_button.addEventListener(MouseEvent.MOUSE_DOWN, tips_button_MOUSE_DOWN);
+			tips_button.buttonMode = true;
+			tips_button.mouseChildren = false;
+			
 			//view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
 			
 			role_start_y = lang_line.y;
@@ -91,9 +95,32 @@ package
 			author.addEventListener(TextEvent.LINK, linkHandler); // слушатель линка в тексте
 			
 			FillTextFields();
-		
+			
+			if (model.show_tips) tips_button.galka.gotoAndStop("checked");
+			else tips_button.galka.gotoAndStop("unchecked");
+
 		}
 		
+		
+		
+		
+		
+		/*********************************************
+		 *      Чекбокс Показывать подсказки         *
+		 *                                           *
+		 */ //****************************************
+		public function tips_button_MOUSE_DOWN(event:MouseEvent):void { 
+			
+			click_sound1.play();
+			if (model.show_tips) {
+				tips_button.galka.gotoAndStop("unchecked");
+				model.show_tips = false;
+			}
+			else {
+				tips_button.galka.gotoAndStop("checked");
+				model.show_tips = true;
+			}
+		}
 		
 		
 		
@@ -156,6 +183,7 @@ package
 			h1.text = langArr[23][LANG] + langArr[3][LANG] + langArr[24][LANG]; 
 			ui_lang.text = langArr[25][LANG];
 			ui_lang_value.text = langArr[26][LANG];
+			ui_tips.text = langArr[37][LANG];
 			designed_to.text = langArr[27][LANG];
 			author.text = langArr[28][LANG];
 			
@@ -166,6 +194,7 @@ package
 			shildik.power.text = langArr[32][LANG];
 			shildik.serial.text = langArr[33][LANG];
 			shildik.made.text = langArr[34][LANG];
+			// передвижка знака пост. напряжения
 			if (LANG == 1) shildik.DC_symbol.x = -80;
 			else if (LANG == 0) shildik.DC_symbol.x = -135;
 			

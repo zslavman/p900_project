@@ -10,6 +10,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.events.Event;
 	import flash.filters.BlurFilter;
+	import flash.display.Stage;
 	
 	/**
 	 * ...
@@ -74,17 +75,11 @@ package
 			var charge:int = RAND(charge_min, charge_max);
 			model.charge_level = charge;
 			trace ("charge = " + charge);
-			//addEventListener(Event.ENTER_FRAME, testing);
-		}
-		
-		
-		
-		
-		public function testing(e:Event):void {
 			
-			//trace ("loading_ready = " + model.loading_ready);
 		}
 		
+		
+
 		
 		
 		
@@ -270,6 +265,8 @@ package
 				removeChild(about_window);
 				about_window = null;
 				Blur('revers');
+				//NOTE: принудительная установка фокуса для возможности послед. нажатия Enter/Esc
+				stage.focus = view.button_sync_up;
 			}
 		}
 		
