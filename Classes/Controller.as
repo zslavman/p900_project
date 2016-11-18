@@ -1,6 +1,7 @@
 package
 {
 	import About_Window;
+
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.*;
@@ -67,7 +68,7 @@ package
 			view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
 			
 			//для событий OVER, OUT нужно указывать конкретную цель
-			view.charging_target.addEventListener(EventTypes.TARGET_OVER, charge_Over); 
+			view.charging_target.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
 			view.charging_target.addEventListener(EventTypes.TARGET_OUT, charge_Out);
 			
 			view.addEventListener(EventTypes.TARGET_CLICK, charge_MOUSE_DOWN);
@@ -75,6 +76,8 @@ package
 			var charge:int = RAND(charge_min, charge_max);
 			model.charge_level = charge;
 			trace ("charge = " + charge);
+			
+
 			
 		}
 		

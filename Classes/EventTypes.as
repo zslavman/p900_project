@@ -31,9 +31,13 @@ package
 		public static const KEY_ESC_ENTER:String = "escORenter";
 		//public static const KEY_F1:String = "f1Help";
 		
-		public static const TARGET_OVER:String = "mouseOver";
+		public static const CHARGER_TARGET_OVER:String = "mouseOver";
 		public static const TARGET_OUT:String = "mouseOut";
 		public static const TARGET_CLICK:String = "targetClick";
+		
+		//public static const TIP_TARGET_OVER:String = "tipTargetOver";
+		//public static const TIP_TARGET_OUT:String = "tipTargetOut";
+		
 		
 		
 		

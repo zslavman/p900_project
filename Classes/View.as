@@ -27,6 +27,9 @@ package
 		private var charger_out:Sound = new _charger_out();
 		private var langArr:Array = [];
 		
+		private var buttons_array:Array = []; // массив кнопок
+		private var tips_array:Array = []; // массив подсказок
+		
 
 		
 		
@@ -47,27 +50,26 @@ package
 			power_switcher.buttonMode = true;
 			power_switcher.mouseChildren = false;
 			
-			// слушатели на нажатие и зажимание
-			button_sync_up.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
-			button_sync_down.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
-			button_light.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
-			button_mode.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
-			button_amp_up.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
-			button_amp_down.addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN);
+			buttons_array = [button_sync_up, button_sync_down, button_mode, button_amp_up, button_amp_down, button_light];
+			tips_array ['target'] = [input_socket]; // строка целей наведения мышки
+			tips_array ['tip'] = [tip1]; // строка соотвествующих им (целям) подсказок
 			
-			// слушатели отпускания кнопки
-			button_sync_up.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_sync_down.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_amp_up.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_amp_down.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			button_mode.addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP);
-			
-			// слушатели если при зажимании мышка съезжает с кнопки
-			button_sync_up.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
-			button_sync_down.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
-			button_amp_up.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
-			button_amp_down.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
-			button_mode.addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP);
+			// добавление слушателей 6-ти кнопок
+			for (var i:int = 0; i < buttons_array.length; i++){ 
+				buttons_array[i].addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN); // слушатели на нажатие и зажимание
+				if (i < 5){
+					buttons_array[i].addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP); // слушатели отпускания кнопки
+					buttons_array[i].addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP); // слушатели если при зажимании мышка съезжает с кнопки
+				}
+			}
+			// добавление слушателей наведения и уведения мыши с мест подсказок
+			for (var j:int = 0; j < tips_array ['target'].length; j++){ 
+				tips_array ['target'][j].addEventListener(MouseEvent.MOUSE_OVER, tip_target_MOUSE_OVER); 
+				tips_array ['target'][j].addEventListener(MouseEvent.MOUSE_OUT, tip_target_MOUSE_OUT);
+				tips_array ['target'][j].buttonMode = true;
+				tips_array ['tip'][j].mouseEnabled = false;
+				tips_array ['tip'][j].visible = false;
+			}
 			
 			
 			//STAGE.addEventListener(Event.RESIZE, resizeListener); 
@@ -95,8 +97,11 @@ package
 			charging_pluged.mouseEnabled = false;
 			charging_pluged.visible = false;
 			
-			FillTextFields();
 			
+			
+			FillTextFields();
+
+
 			/*********************************************
 			 *          Проверки разного рода            *
 			 */ //****************************************
@@ -109,7 +114,32 @@ package
 		}
 		
 		
-
+		//BUG: не работает слушатель на OVER
+		// мышка над целями подсказок
+		public function tip_target_MOUSE_OVER(event:MouseEvent):void {
+			
+			var str:* = event.currentTarget.name;
+			for (var i:int = 0; i < tips_array ['target'].length; i++){ 
+				if (str == tips_array ['target'][i]) {
+					tips_array ['tip'][i].visible = true;
+					var tre:Boolean = true;
+				}
+			}
+		}
+		
+		public function tip_target_MOUSE_OUT(event:MouseEvent):void {
+			
+			var str:String = event.currentTarget.name;
+			for (var i:int = 0; i < tips_array ['target'].length; i++){ 
+				if (str == tips_array ['target'][i]) tips_array ['tip'][i].visible = false;
+			}
+		}
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -118,7 +148,7 @@ package
 
 		// мышка над разъемом зарядки
 		public function charging_target_MOUSE_OVER(event:MouseEvent):void {
-			dispatchEvent(new Event(EventTypes.TARGET_OVER));
+			dispatchEvent(new Event(EventTypes.CHARGER_TARGET_OVER));
 		}
 		public function charging_target_MOUSE_OUT(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.TARGET_OUT));
