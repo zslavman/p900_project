@@ -88,27 +88,33 @@ package
 			view.container.battery_indication.gotoAndStop(charge_frame);
 			view.container.battery_indication.visible = false;
 
+			
 			// объекты в которых храняться текущие настройки выбранного режима
-			mode_filter1024.id = 'mode_filter1024';
-			mode_filter1024.name = Model.langArr[15];
-			mode_filter1024.gain = 20; // номер элемента массива коэффициентов усиления
-			mode_filter1024.gain_val = '0.001';
+			mode_filter1024 = {
+				id:'mode_filter1024',
+				name: Model.langArr[15],
+				gain:20, // номер элемента массива коэффициентов усиления
+				gain_val:'0.001' 
+			};
 			
-			mode_filter2048.id = 'mode_filter2048';
-			mode_filter2048.name = Model.langArr[16];
-			mode_filter2048.gain = 20;
-			mode_filter2048.gain_val = '0.001';
+			mode_filter2048 = {
+				id:'mode_filter2048',
+				name: Model.langArr[16],
+				gain:20,
+				gain_val:'0.001' 
+			};
 			
-			mode_akustika.id = 'mode_akustika';
-			mode_akustika.name = '';
-			mode_akustika.gain = 5;
-			mode_akustika.gain_val = 0;
-			mode_akustika.sync_value = '0.00';
+			mode_akustika = {
+				id:'mode_akustika',
+				name:'',
+				gain:5,
+				gain_val:0,
+				sync_value:'0.00'
+			};
 			
 			menu_array = [mode_akustika, mode_filter1024, mode_filter2048];
 
 			menu_now = menu_array[N].id;
-
 		}
 		
 		

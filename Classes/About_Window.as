@@ -113,12 +113,14 @@ package
 			
 			click_sound1.play();
 			if (model.show_tips) {
-				tips_button.galka.gotoAndStop("unchecked");
+				tips_button.galka.gotoAndStop('unchecked');
 				model.show_tips = false;
+				controller.set_buttonMode('hide');
 			}
 			else {
-				tips_button.galka.gotoAndStop("checked");
+				tips_button.galka.gotoAndStop('checked');
 				model.show_tips = true;
+				controller.set_buttonMode('show');
 			}
 		}
 		
@@ -229,7 +231,7 @@ package
 		}
 		
 		
-				// Анимация языковой кнопки
+		// Анимация языковой кнопки
 		public function LangTween(direction:String = 'def'):void {
 			
 			var a:uint = 1;

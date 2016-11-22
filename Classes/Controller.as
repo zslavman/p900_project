@@ -68,8 +68,8 @@ package
 			view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
 			
 			//для событий OVER, OUT нужно указывать конкретную цель
-			view.charging_target.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
-			view.charging_target.addEventListener(EventTypes.TARGET_OUT, charge_Out);
+			view.DC_plug.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
+			view.DC_plug.addEventListener(EventTypes.TARGET_OUT, charge_Out);
 			
 			view.addEventListener(EventTypes.TARGET_CLICK, charge_MOUSE_DOWN);
 			
@@ -320,6 +320,11 @@ package
 			if (firmware != null && model.loading_ready) {
 				firmware.Screen_init();
 			}
+		}
+		
+		public function set_buttonMode(direction:String):void {
+		
+			view.set_buttonMode(direction);
 		}
 		
 		

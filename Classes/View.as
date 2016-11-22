@@ -1,13 +1,20 @@
 package
 {
+	import fl.motion.Tweenables;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.Event
+	import flash.events.TimerEvent;
 	import flash.media.Sound;
+	import flash.utils.Timer;
 	
 	import flash.events.FocusEvent
+	
+	import fl.transitions.Tween;
+	import fl.transitions.TweenEvent;
+	import fl.transitions.easing.*;
 	
 	/**
 	 * ...
@@ -30,6 +37,9 @@ package
 		private var buttons_array:Array = []; // массив кнопок
 		private var tips_array:Array = []; // массив подсказок
 		
+		private var visibility:Tween; // твин плавного появления/скрытия подсказок
+		private var Timer_Delay:Timer = new Timer (700, 1); // задержка появления подсказки
+		private var currentObj:Object = { }; // объект в котором будет храниться мувиклип отправивший задержку подсказки
 
 		
 		
@@ -50,14 +60,18 @@ package
 			power_switcher.buttonMode = true;
 			power_switcher.mouseChildren = false;
 			
+			Timer_Delay.addEventListener(TimerEvent.TIMER, func_Timer_Delay);
+			
 			buttons_array = [button_sync_up, button_sync_down, button_mode, button_amp_up, button_amp_down, button_light];
-			tips_array ['target'] = [input_socket]; // строка целей наведения мышки
-			tips_array ['tip'] = [tip1]; // строка соотвествующих им (целям) подсказок
+			
+			// каждому элементу массива с ключем 'target' соответствует элемент массива с ключем 'tip'
+			tips_array ['target'] = [input_socket, phones_socket, LED_red, LED_green]; // строка целей наведения мышки
+			tips_array ['tip'] = [tip1, tip2, tip3, tip4]; // строка соотвествующих им (целям) подсказок
 			
 			// добавление слушателей 6-ти кнопок
 			for (var i:int = 0; i < buttons_array.length; i++){ 
 				buttons_array[i].addEventListener(MouseEvent.MOUSE_DOWN, functional_button_MOUSE_DOWN); // слушатели на нажатие и зажимание
-				if (i < 5){
+				if (i < 5){ // if (i > 4) continue - равносильное выражение, continue - продолжать итерацию не выполняя строк ниже
 					buttons_array[i].addEventListener(MouseEvent.MOUSE_UP, functional_button_MOUSE_UP); // слушатели отпускания кнопки
 					buttons_array[i].addEventListener(MouseEvent.MOUSE_OUT, functional_button_MOUSE_UP); // слушатели если при зажимании мышка съезжает с кнопки
 				}
@@ -66,19 +80,21 @@ package
 			for (var j:int = 0; j < tips_array ['target'].length; j++){ 
 				tips_array ['target'][j].addEventListener(MouseEvent.MOUSE_OVER, tip_target_MOUSE_OVER); 
 				tips_array ['target'][j].addEventListener(MouseEvent.MOUSE_OUT, tip_target_MOUSE_OUT);
-				tips_array ['target'][j].buttonMode = true;
+				//tips_array ['target'][j].buttonMode = true;
 				tips_array ['tip'][j].mouseEnabled = false;
-				tips_array ['tip'][j].visible = false;
+				tips_array ['tip'][j].alpha = 0;
 			}
+			
+			set_buttonMode('show');
 			
 			
 			//STAGE.addEventListener(Event.RESIZE, resizeListener); 
 			STAGE.addEventListener(KeyboardEvent.KEY_DOWN, Key_DOWN);
 			
-			charging_target.addEventListener(MouseEvent.MOUSE_DOWN, charging_target_MOUSE_DOWN);
-			charging_target.addEventListener(MouseEvent.MOUSE_OVER, charging_target_MOUSE_OVER);
-			charging_target.addEventListener(MouseEvent.MOUSE_OUT, charging_target_MOUSE_OUT);
-			charging_target.buttonMode = true;
+			DC_plug.addEventListener(MouseEvent.MOUSE_DOWN, DC_plug_MOUSE_DOWN);
+			DC_plug.addEventListener(MouseEvent.MOUSE_OVER, DC_plug_MOUSE_OVER);
+			DC_plug.addEventListener(MouseEvent.MOUSE_OUT, DC_plug_MOUSE_OUT);
+			DC_plug.buttonMode = true;
 			
 
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
@@ -96,7 +112,6 @@ package
 			
 			charging_pluged.mouseEnabled = false;
 			charging_pluged.visible = false;
-			
 			
 			
 			FillTextFields();
@@ -118,25 +133,37 @@ package
 		// мышка над целями подсказок
 		public function tip_target_MOUSE_OVER(event:MouseEvent):void {
 			
-			var str:* = event.currentTarget.name;
+			if (!model.show_tips) return;
+			
+			var str:String = event.currentTarget.name;
 			for (var i:int = 0; i < tips_array ['target'].length; i++){ 
-				if (str == tips_array ['target'][i]) {
-					tips_array ['tip'][i].visible = true;
-					var tre:Boolean = true;
+				if (str == (tips_array ['target'][i]).name) {
+					currentObj = tips_array ['tip'][i];
+					Timer_Delay.start();
 				}
 			}
 		}
 		
 		public function tip_target_MOUSE_OUT(event:MouseEvent):void {
 			
+			if (!model.show_tips) return;
+			
 			var str:String = event.currentTarget.name;
 			for (var i:int = 0; i < tips_array ['target'].length; i++){ 
-				if (str == tips_array ['target'][i]) tips_array ['tip'][i].visible = false;
+				if (str == (tips_array ['target'][i]).name) {
+					Timer_Delay.reset();
+					currentObj.alpha = 0;
+				}
 			}
 		}
 		
+
 		
+		private function func_Timer_Delay(event:Event):void {
 		
+			if (visibility != null) visibility.stop();
+			visibility = new Tween (currentObj, 'alpha', None.easeOut, 0, 1, 0.15, true);
+		}
 		
 		
 		
@@ -147,13 +174,13 @@ package
 		
 
 		// мышка над разъемом зарядки
-		public function charging_target_MOUSE_OVER(event:MouseEvent):void {
+		public function DC_plug_MOUSE_OVER(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.CHARGER_TARGET_OVER));
 		}
-		public function charging_target_MOUSE_OUT(event:MouseEvent):void {
+		public function DC_plug_MOUSE_OUT(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.TARGET_OUT));
 		}
-		public function charging_target_MOUSE_DOWN(event:MouseEvent):void {
+		public function DC_plug_MOUSE_DOWN(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.TARGET_CLICK));
 			if (!model.charge_connected) charger_out.play();
 			else if (model.charge_connected) charger_in.play();
@@ -269,10 +296,27 @@ package
 			turn_on.text = langArr[12][LANG]; // Вкл.
 			zaryad.text = langArr[13][LANG]; // Заряд.
 			input.text = langArr[14][LANG]; // Вход.
+			
+			tip1.tip_name.text = langArr[38][LANG]; // Подключение датчиков:
+			tip1.type1.text = langArr[39][LANG]; // акустический:
+			tip1.type2.text = langArr[40][LANG]; // индукционный:
+			
+			tip3.tip_name.text = langArr[41][LANG]; // Индикатор приема сигнала...
+			tip4.tip_name.text = langArr[42][LANG]; // Индикатор приема сигнала...
 	
 		}
 		
 		
+		
+		
+		
+		public function set_buttonMode(direction:String):void {
+		
+			for (var i:int = 0; i < tips_array ['target'].length; i++){ 
+				if (direction == 'show') tips_array ['target'][i].buttonMode = true;
+				else if (direction == 'hide') tips_array ['target'][i].buttonMode = false;
+			}
+		}
 		
 
 		//public function testing(e:Event):void {

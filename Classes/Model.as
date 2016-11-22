@@ -19,7 +19,7 @@ package
 		private var _loading_ready:Boolean = false;
 		private var _charge_level:int; // число заряда батареи (от 20 до 100), вычисляется после загрузки Controller.as
 		private var _charge_connected:Boolean = false; // подключена ли зарядка
-		private var _show_tips:Boolean = false; // показывать подсказки
+		private var _show_tips:Boolean = true; // показывать подсказки
 		
 
 		
@@ -67,6 +67,11 @@ package
 			langArr[34] = ["Сделано в Украине", "Made in Ukraine"];
 			langArr[35] = ["http://www.kep.ua/ru/", "http://www.kep.ua/en/"];
 			langArr[37] = ["Показывать \rподсказки", "Show \rtips"];
+			langArr[38] = ["Подключение датчиков:", "Sensors connecting:"];
+			langArr[39] = ["акустический", "acoustic"];
+			langArr[40] = ["индукционный", "inductive"];
+			langArr[41] = ["Индикатор приема сигнала внутр. антенной приемника в режиме акустики", "Signal receiving indicator by device internal antenna (in acoustic mode)"];
+			langArr[42] = ["Индикатор питания", "Power indicator"];
 
 			
 			gainFilterConst = ["1.0", "1.2", "1.5", "1.9", "2.4", "3.0", "3.7", "4.8", "6.0", "7.5", "10.0", "12.5", "15.5", "19.5", 24, 31, 40, 50, 65, 80, 100, 130, 160, 200, 250, 325, 420, 520, 650, 850, 1050, 1300, 1700, 2100, 2800, 3500, 4300, 5500, 8000, 10000, 12000, 16000, 20000, 25000, 50000]; //45 элементов, начинать с 21-го
