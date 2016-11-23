@@ -67,7 +67,7 @@ package
 			langArr[34] = ["Сделано в Украине", "Made in Ukraine"];
 			langArr[35] = ["http://www.kep.ua/ru/", "http://www.kep.ua/en/"];
 			langArr[37] = ["Показывать \rподсказки", "Show \rtips"];
-			langArr[38] = ["Подключение датчиков:", "Sensors connecting:"];
+			langArr[38] = ["Подключаемые датчики:", "Connectable sensors:"];
 			langArr[39] = ["акустический", "acoustic"];
 			langArr[40] = ["индукционный", "inductive"];
 			langArr[41] = ["Индикатор приема сигнала внутр. антенной приемника в режиме акустики", "Signal receiving indicator by device internal antenna (in acoustic mode)"];

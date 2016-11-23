@@ -126,7 +126,7 @@ package
 
 		public function Opacity():void {
 			opacity_tween = new Tween (view.charging_plug, "alpha", None.easeOut, 0, 0.6, opacity_dur, true);
-			moveX_tween = new Tween (view.charging_plug, "x", Strong.easeOut, 1034, 1006, opacity_dur, true);
+			moveX_tween = new Tween (view.charging_plug, "x", Strong.easeOut, 1094, 1006, opacity_dur, true);
 			moveY_tween = new Tween (view.charging_plug, "y", Strong.easeOut, 340, 372, opacity_dur, true);
 		}
 		public function allTweenStop():void {

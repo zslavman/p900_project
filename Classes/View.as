@@ -80,7 +80,6 @@ package
 			for (var j:int = 0; j < tips_array ['target'].length; j++){ 
 				tips_array ['target'][j].addEventListener(MouseEvent.MOUSE_OVER, tip_target_MOUSE_OVER); 
 				tips_array ['target'][j].addEventListener(MouseEvent.MOUSE_OUT, tip_target_MOUSE_OUT);
-				//tips_array ['target'][j].buttonMode = true;
 				tips_array ['tip'][j].mouseEnabled = false;
 				tips_array ['tip'][j].alpha = 0;
 			}
@@ -151,6 +150,7 @@ package
 			var str:String = event.currentTarget.name;
 			for (var i:int = 0; i < tips_array ['target'].length; i++){ 
 				if (str == (tips_array ['target'][i]).name) {
+					if (visibility != null) visibility.stop();
 					Timer_Delay.reset();
 					currentObj.alpha = 0;
 				}
