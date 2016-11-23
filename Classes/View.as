@@ -128,7 +128,6 @@ package
 		}
 		
 		
-		//BUG: не работает слушатель на OVER
 		// мышка над целями подсказок
 		public function tip_target_MOUSE_OVER(event:MouseEvent):void {
 			

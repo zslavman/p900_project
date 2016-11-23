@@ -21,7 +21,7 @@ package
 		private var _charge_connected:Boolean = false; // подключена ли зарядка
 		private var _show_tips:Boolean = true; // показывать подсказки
 		
-
+		//TODO: добавить в кукисы язык и галочку подсказок
 		
 		public function Model(language:uint) {
 			
@@ -70,7 +70,7 @@ package
 			langArr[38] = ["Подключаемые датчики:", "Connectable sensors:"];
 			langArr[39] = ["акустический", "acoustic"];
 			langArr[40] = ["индукционный", "inductive"];
-			langArr[41] = ["Индикатор приема сигнала внутр. антенной приемника в режиме акустики", "Signal receiving indicator by device internal antenna (in acoustic mode)"];
+			langArr[41] = ["Индикатор приема сигнала внутренней антенной приемника в режиме акустики", "Signal receiving indicator by device internal antenna (in acoustic mode)"];
 			langArr[42] = ["Индикатор питания", "Power indicator"];
 
 			
