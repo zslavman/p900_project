@@ -6,20 +6,18 @@ package
 	import flash.events.IOErrorEvent;
 	import flash.events.TimerEvent;
 	import flash.ui.ContextMenu;
-	import flash.utils.getDefinitionByName;
 	import flash.utils.Timer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import flash.events.KeyboardEvent;
-	import flash.system.Capabilities;
 	import flash.display.Stage;
 	import flash.display.StageAlign; 
 	import flash.display.StageScaleMode;
 	
-	//import com.google.analytics.AnalyticsTracker;
-	//import com.google.analytics.GATracker;
-	//import com.google.analytics.utils.URL;
+	import com.google.analytics.AnalyticsTracker;
+	import com.google.analytics.GATracker;
+	import com.google.analytics.utils.URL;
 	
 	
 	/**
@@ -36,16 +34,15 @@ package
 		private var preVisual:PreloaderVisual;
 		private var bLoaded: uint = loaderInfo.bytesLoaded;
 		private var bTotal: uint = loaderInfo.bytesTotal;
-		private var Timer_Test:Timer = new Timer(50, 1); //50 ;100
+		private var Timer_Test:Timer = new Timer(50, 10); //50 ;100
 		private var my_menu:ContextMenu;
-		private var LANG:uint;
-		private var lang: String = Capabilities.language // определение языка ОС
+		
 		
 		//Аналитика
-		//public var ACCOUNT_ID: String = "UA-78572464-1";  
-		//public var BRIDGE_MODE: String = "AS3";
-		//public var DEBUG_MODE: Boolean = false;
-		//public var tracker:GATracker;
+		public var ACCOUNT_ID: String = "UA-69521996-2";
+		public var BRIDGE_MODE: String = "AS3";
+		public var DEBUG_MODE: Boolean = false;
+		public var tracker:GATracker;
 		
 		
 
@@ -71,8 +68,6 @@ package
 			//stage.align = StageAlign.TOP;
 			
 
-
-			
 			// вывод на сцену индикации загрузки
 			preVisual = new PreloaderVisual();
 			addChild(preVisual);
@@ -82,35 +77,15 @@ package
 			Timer_Test.addEventListener(TimerEvent.TIMER, checkLoading);
 			Timer_Test.start();
 			
-			
-			//tracker = new GATracker(this, ACCOUNT_ID, BRIDGE_MODE, DEBUG_MODE);
-			//tracker.trackPageview("Uspeshnaya zagruzka");
-
 			// удаление лишнего меню флешки
 			my_menu = new ContextMenu();
 			my_menu.hideBuiltInItems();
 			contextMenu = my_menu;
 			
-			//определение языка флешки
-			
-			switch (lang) {
-				case "ru":
-				LANG = 0;
-				break;
-				
-				case "en":
-				LANG = 1;
-				break;
-				
-				default: 
-				LANG = 1;
-				break;
-			}
-			
-			model_data = new Model(LANG);
+			model_data = new Model();
 
-			preVisual.INFORMATOR.text = Model.langArr[0][LANG]; // Загрузка...
-			preVisual.version.text = Model.langArr[1][LANG]; // P-900 v.2.0
+			preVisual.INFORMATOR.text = Model.langArr[0][model_data.LANG]; // Загрузка...
+			preVisual.version.text = Model.langArr[1][model_data.LANG]; // P-900 v.2.0
 			
 		}
 	
@@ -150,6 +125,9 @@ package
 		 */ //****************************************
 		
 		private function loadingFinished():void {
+			
+			//tracker = new GATracker(this, ACCOUNT_ID, BRIDGE_MODE, DEBUG_MODE);
+			//tracker.trackPageview("Loading OK");
 		
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			Timer_Test.reset();
@@ -164,9 +142,6 @@ package
 			addChild(view);
 			addChild(controller);
 		}
-		
-
-		
 	}
 }
 

@@ -6,6 +6,12 @@ package
 	 * @author zslavman
 	 * Класс хранения констант, массивов
 	 */
+	
+	 import flash.net.SharedObject;
+	 import flash.system.Capabilities;
+	 
+	 
+	 
 	public class Model {
 		
 		public static const langArr:Array = [];
@@ -19,13 +25,15 @@ package
 		private var _loading_ready:Boolean = false;
 		private var _charge_level:int; // число заряда батареи (от 20 до 100), вычисляется после загрузки Controller.as
 		private var _charge_connected:Boolean = false; // подключена ли зарядка
-		private var _show_tips:Boolean = true; // показывать подсказки
+		private var _show_tips:Boolean; // показывать подсказки
 		
-		//TODO: добавить в кукисы язык и галочку подсказок
+		public static var SharedObj:SharedObject;
+		private var lang:String; 
+
 		
-		public function Model(language:uint) {
-			
-			_LANG = language;
+		
+		
+		public function Model() {
 			
 			langArr[0] = ["Загрузка...", "Loading..."];
 			langArr[1] = ["П-900 v.2.0", "P-900 v.2.0"];
@@ -70,9 +78,41 @@ package
 			langArr[38] = ["Подключаемые датчики:", "Connectable sensors:"];
 			langArr[39] = ["акустический", "acoustic"];
 			langArr[40] = ["индукционный", "inductive"];
-			langArr[41] = ["Индикатор приема сигнала внутренней антенной приемника в режиме акустики", "Signal receiving indicator by device internal antenna (in acoustic mode)"];
+			langArr[41] = ["Индикатор приема сигнала внутренней антенной приемника в режиме акустики", "LED, indicating a signal receiving by internal antenna in acoustic mode"];
 			langArr[42] = ["Индикатор питания", "Power indicator"];
+			
+			// синхронизация с кукисами клиента, для начала заменим пробелы в названии создаваемого шаредобжект (не допускаются пробелы в названии шаредобджект)
+			// создаем регулярное выражение для поска пробелов в названии
+			
+			var reg:RegExp = / /g; // парамерт /g маска для всех " " в выражении
+			var str1:String = langArr[1][1].replace(reg, '_');
 
+			SharedObj = SharedObject.getLocal(str1, "/"); // параметр "/" - записывает *.SOL не создавая директории
+			
+			_LANG = SharedObj.data.LANG;
+			
+			
+			if (SharedObj.data.LANG == null) { // если в кукисах нет инфы о языке
+
+				lang = Capabilities.language; // определяем язык ОС
+				
+				switch (lang) {
+					case "ru":
+					LANG = 0; // тут идет вызов ф-ции set LANG();
+					break;
+					
+					case "en":
+					LANG = 1; // тут идет вызов ф-ции set LANG();
+					break;
+					
+					default: 
+					LANG = 1; // тут идет вызов ф-ции set LANG();
+					break;
+				}
+			}
+			if (SharedObj.data.show_tips == null) {
+				show_tips = true;
+			}
 			
 			gainFilterConst = ["1.0", "1.2", "1.5", "1.9", "2.4", "3.0", "3.7", "4.8", "6.0", "7.5", "10.0", "12.5", "15.5", "19.5", 24, 31, 40, 50, 65, 80, 100, 130, 160, 200, 250, 325, 420, 520, 650, 850, 1050, 1300, 1700, 2100, 2800, 3500, 4300, 5500, 8000, 10000, 12000, 16000, 20000, 25000, 50000]; //45 элементов, начинать с 21-го
 			gainAcusticaConst = [1, "1.3", "1.6", 2, "2.4", 3, 4, 5, 6, 8, 10, 13, 16, 20, 26, 33, 44, 53, 67, 92, 110, 200, 400, 800, 1600, 3000, 6000, 12000, 20000, 40000]; //30 элементов, начинать с 5-го
@@ -88,6 +128,18 @@ package
 		}
 		public function set LANG(value:uint):void {
 			_LANG = value;
+			SharedObj.data.LANG = _LANG;
+			SharedObj.flush();
+		}
+		
+		
+		public function get show_tips():Boolean {
+			return _show_tips;
+		}
+		public function set show_tips(value:Boolean):void {
+			_show_tips = value;
+			SharedObj.data.show_tips = _show_tips;
+			SharedObj.flush();
 		}
 		
 		
@@ -138,15 +190,5 @@ package
 		public function set charge_connected(value:Boolean):void {
 			_charge_connected = value;
 		}
-		
-		
-		public function get show_tips():Boolean {
-			return _show_tips;
-		}
-		public function set show_tips(value:Boolean):void {
-			_show_tips = value;
-		}
-
 	}
-
 }

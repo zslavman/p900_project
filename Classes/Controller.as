@@ -36,7 +36,7 @@ package
 		private var rotate_limit:Number = 150;// лимит поворота ручки контраст в градусах
 		private var final_rotation:Number = 0;
 		
-		private var charge_min:int = 21; // пределы заряда в процентах
+		private var charge_min:int = 30; // пределы заряда в процентах
 		private var charge_max:int = 100;
 		
 		private var DisplayObjects:Array = []; // массив дисплейобъектов которые нужно блюрить
@@ -46,7 +46,7 @@ package
 		private var moveX_tween:Tween;
 		private var moveY_tween:Tween;
 		private var opacity_dur:Number = 0.25;
-
+		
 
 		
 		
@@ -77,13 +77,11 @@ package
 			model.charge_level = charge;
 			trace ("charge = " + charge);
 			
-
-			
 		}
 		
 		
 
-		
+
 		
 		
 		

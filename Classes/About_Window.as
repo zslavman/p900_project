@@ -115,12 +115,12 @@ package
 			if (model.show_tips) {
 				tips_button.galka.gotoAndStop('unchecked');
 				model.show_tips = false;
-				controller.set_buttonMode('hide');
+				//controller.set_buttonMode('hide');
 			}
 			else {
 				tips_button.galka.gotoAndStop('checked');
 				model.show_tips = true;
-				controller.set_buttonMode('show');
+				//controller.set_buttonMode('show');
 			}
 		}
 		
@@ -134,15 +134,15 @@ package
 		 *              Анимация логотипа            *
 		 *                                           *
 		 *///*****************************************
+		 public function startShine():void {
+		 
+			 logo_shiner = new Tween (logo.shine_line, "x", None.easeOut, shine_start_x, shine_finish_x, shine_duration, true);
+			 logo_shiner.addEventListener(TweenEvent.MOTION_FINISH, ifShineFinish);
+		 }
 		public function ifShineFinish(event:TweenEvent):void {
 			
 			logo_shiner.removeEventListener(TweenEvent.MOTION_FINISH, ifShineFinish);
 			startShine();
-		}
-		public function startShine():void {
-		
-			logo_shiner = new Tween (logo.shine_line, "x", None.easeOut, shine_start_x, shine_finish_x, shine_duration, true);
-			logo_shiner.addEventListener(TweenEvent.MOTION_FINISH, ifShineFinish);
 		}
 		
 		

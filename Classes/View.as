@@ -40,6 +40,9 @@ package
 		private var visibility:Tween; // твин плавного появления/скрытия подсказок
 		private var Timer_Delay:Timer = new Timer (700, 1); // задержка появления подсказки
 		private var currentObj:Object = { }; // объект в котором будет храниться мувиклип отправивший задержку подсказки
+		
+		private var magic_rotation:Tween; // твин вращения анимации кнопки "i"
+		private var rotat_dur:Number = 5; // скорость (кол-во секунд на 1 оборот)
 
 		
 		
@@ -54,7 +57,7 @@ package
 
 			about_button.addEventListener(MouseEvent.MOUSE_DOWN, about_button_MOUSE_DOWN);
 			about_button.buttonMode = true;
-			about_button.mouseChildren = false;
+			about_button.mouseChildren = true;
 			
 			power_switcher.addEventListener(MouseEvent.MOUSE_DOWN, power_switcher_MOUSE_DOWN);
 			power_switcher.buttonMode = true;
@@ -84,7 +87,7 @@ package
 				tips_array ['tip'][j].alpha = 0;
 			}
 			
-			set_buttonMode('show');
+			//set_buttonMode('show');
 			
 			
 			//STAGE.addEventListener(Event.RESIZE, resizeListener); 
@@ -114,6 +117,9 @@ package
 			
 			
 			FillTextFields();
+			
+			// запуск анимации кнопки "i"
+			startRot();
 
 
 			/*********************************************
@@ -126,6 +132,29 @@ package
 			//STAGE.addEventListener(Event.DEACTIVATE, deact);
 			//STAGE.addEventListener(FocusEvent.FOCUS_IN, focusInHandler);
 		}
+		
+		
+		
+		
+		
+		/*********************************************
+		 *           Анимация на кнопке "i"          *
+		 *                                           *
+		 *///*****************************************
+		 public function startRot():void {
+		 
+			magic_rotation = new Tween(mag_c.shine_line, 'rotation', None.easeOut, 0, 360, rotat_dur, true);
+			magic_rotation.addEventListener(TweenEvent.MOTION_FINISH, ifRotFinish);
+		 }
+		public function ifRotFinish(event:TweenEvent):void {
+			
+			magic_rotation.removeEventListener(TweenEvent.MOTION_FINISH, ifRotFinish);
+			startRot();
+		}
+		
+		
+		
+		
 		
 		
 		// мышка над целями подсказок
