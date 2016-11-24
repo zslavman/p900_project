@@ -22,6 +22,8 @@ package
 	 */
 	
 	 
+	//TODO: координаты бендера (120, 770) 
+	 
 	public class View extends Sprite {
 		
 		private var model:Model;
@@ -42,7 +44,8 @@ package
 		private var currentObj:Object = { }; // объект в котором будет храниться мувиклип отправивший задержку подсказки
 		
 		private var magic_rotation:Tween; // твин вращения анимации кнопки "i"
-		private var rotat_dur:Number = 5; // скорость (кол-во секунд на 1 оборот)
+		private var rotat_dur:Number = 8; // скорость (кол-во секунд на 1 оборот)
+		private var ease:Function =  None.easeInOut;
 
 		
 		
@@ -143,7 +146,7 @@ package
 		 *///*****************************************
 		 public function startRot():void {
 		 
-			magic_rotation = new Tween(mag_c.shine_line, 'rotation', None.easeOut, 0, 360, rotat_dur, true);
+			magic_rotation = new Tween(mag_c.shine_line, 'rotation', ease, 0, 360, rotat_dur, true);
 			magic_rotation.addEventListener(TweenEvent.MOTION_FINISH, ifRotFinish);
 		 }
 		public function ifRotFinish(event:TweenEvent):void {

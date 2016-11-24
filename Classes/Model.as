@@ -90,8 +90,6 @@ package
 			SharedObj = SharedObject.getLocal(str1, "/"); // параметр "/" - записывает *.SOL не создавая директории
 			
 			_LANG = SharedObj.data.LANG;
-			
-			
 			if (SharedObj.data.LANG == null) { // если в кукисах нет инфы о языке
 
 				lang = Capabilities.language; // определяем язык ОС
@@ -110,8 +108,10 @@ package
 					break;
 				}
 			}
+			
+			_show_tips = SharedObj.data.show_tips;
 			if (SharedObj.data.show_tips == null) {
-				show_tips = true;
+				show_tips = true; // тут идет вызов ф-ции set show_tips();
 			}
 			
 			gainFilterConst = ["1.0", "1.2", "1.5", "1.9", "2.4", "3.0", "3.7", "4.8", "6.0", "7.5", "10.0", "12.5", "15.5", "19.5", 24, 31, 40, 50, 65, 80, 100, 130, 160, 200, 250, 325, 420, 520, 650, 850, 1050, 1300, 1700, 2100, 2800, 3500, 4300, 5500, 8000, 10000, 12000, 16000, 20000, 25000, 50000]; //45 элементов, начинать с 21-го

@@ -1,5 +1,6 @@
 package
 {
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
@@ -98,7 +99,26 @@ package
 			
 			if (model.show_tips) tips_button.galka.gotoAndStop("checked");
 			else tips_button.galka.gotoAndStop("unchecked");
+			
+			addEventListener(MouseEvent.MOUSE_MOVE, followCursor);
 
+		}
+		
+		
+
+
+		public function followCursor(event:MouseEvent):void {
+			
+			EyeRot(eye1);
+			EyeRot(eye2);
+		}
+		
+		public function EyeRot(mc:MovieClip):void {
+			
+			var dy:Number = mouseY - mc.y;
+			var dx:Number  = mouseX - mc.x;
+			var angle:Number  = Math.atan2(dy, dx) * 180 / Math.PI;
+			mc.rotation = angle;
 		}
 		
 		
