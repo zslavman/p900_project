@@ -29,7 +29,6 @@ package
 		private var model:Model;
 		private var STAGE:Stage;
 
-
 		private var power_sound:Sound = new _power_sound();
 		private var click_robot_202:Sound = new _click_robot_202();
 		private var charger_in:Sound = new _charger_in();
@@ -118,6 +117,8 @@ package
 			charging_pluged.mouseEnabled = false;
 			charging_pluged.visible = false;
 			
+			b.addEventListener(MouseEvent.MOUSE_DOWN, b_MOUSE_DOWN);
+			
 			
 			FillTextFields();
 			
@@ -137,6 +138,14 @@ package
 		}
 		
 		
+		
+		
+		
+				
+		public function b_MOUSE_DOWN(event:MouseEvent):void {
+		
+			dispatchEvent(new Event(EventTypes.ADD_BENDER));
+		}
 		
 		
 		

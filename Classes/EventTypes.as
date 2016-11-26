@@ -35,8 +35,10 @@ package
 		public static const TARGET_OUT:String = "mouseOut";
 		public static const TARGET_CLICK:String = "targetClick";
 		
-		//public static const TIP_TARGET_OVER:String = "tipTargetOver";
-		//public static const TIP_TARGET_OUT:String = "tipTargetOut";
+		
+		public static const ADD_BENDER:String = "addBender";
+		
+
 		
 		
 		

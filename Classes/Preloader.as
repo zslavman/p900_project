@@ -138,7 +138,7 @@ package
 
 			nextFrame();
 			view = new View(stage, model_data);
-			controller = new Controller(view, model_data);
+			controller = new Controller(stage, view, model_data);
 			addChild(view);
 			addChild(controller);
 		}

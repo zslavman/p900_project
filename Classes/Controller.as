@@ -25,10 +25,13 @@ package
 		private var model:Model;
 		private var view:View;
 		private var controller:Controller;
+		private var STAGE:Stage;
+		
 		
 		
 		private var firmware:Firmware;
 		private var about_window:About_Window;
+		private var bender:Bender;
 		
 		
 		private var langArr:Array = [];
@@ -51,12 +54,13 @@ package
 		
 		
 		
-		public function Controller(_view:View, _model:Model) {
+		public function Controller(_stage:Stage, _view:View, _model:Model) {
 			
 			controller = this;
 			view = _view;
 			model = _model;
 			langArr = Model.langArr;
+			STAGE = _stage;
 			
 			DisplayObjects = [view];
 			
@@ -66,6 +70,9 @@ package
 			view.addEventListener(EventTypes.CONTRAST_MOUSE_DOWN, ContrastMouseDown);
 			
 			view.addEventListener(EventTypes.KEY_ESC_ENTER, Key_Esc_or_Enter);
+			
+			view.addEventListener(EventTypes.ADD_BENDER, add_Bender);
+			
 			
 			//для событий OVER, OUT нужно указывать конкретную цель
 			view.DC_plug.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
@@ -80,6 +87,17 @@ package
 		}
 		
 		
+
+		
+		
+		
+		
+		public function add_Bender(event:Event):void {
+			if (bender == null) {
+				bender = new Bender(STAGE);
+				addChild(bender);
+			}
+		}
 
 
 		
