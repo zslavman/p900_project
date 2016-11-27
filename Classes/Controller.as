@@ -55,6 +55,7 @@ package
 		private var opacity_dur:Number = 0.25;
 		
 		private var c:Color = new Color();
+		private var dissolve_trick:Tween;
 		
 
 
@@ -149,12 +150,16 @@ package
 				trick.y = 715;
 				trick.txt.text = Model.langArr[43][model.LANG];
 				view.addChild(trick);
-				var dissolve_trick:Tween = new Tween (trick, 'alpha', None.easeInOut, 1, 0, 3, true);
+				dissolve_trick = new Tween (trick, 'alpha', None.easeInOut, 1, 0, 3, true);
 			}
 			else if (bender != null){
 				bender.destroy();
 				view.removeChild(bender);
 				bender = null;
+				
+				dissolve_trick.stop();
+				view.removeChild(trick);
+				trick = null;
 			}
 		}
 
