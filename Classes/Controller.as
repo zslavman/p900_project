@@ -1,17 +1,21 @@
 package
 {
 	import About_Window;
+	import flash.display.MovieClip;
+	import flash.geom.Point;
 
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.*;
-	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.Event;
 	import flash.filters.BlurFilter;
 	import flash.display.Stage;
+	
+	import fl.motion.Color;
+	import com.google.analytics.GATracker;
 	
 	/**
 	 * ...
@@ -26,9 +30,9 @@ package
 		private var view:View;
 		private var controller:Controller;
 		private var STAGE:Stage;
-		
-		
-		
+		private var trick:Secret;
+		private var tracker:GATracker;
+
 		private var firmware:Firmware;
 		private var about_window:About_Window;
 		private var bender:Bender;
@@ -50,12 +54,16 @@ package
 		private var moveY_tween:Tween;
 		private var opacity_dur:Number = 0.25;
 		
+		private var c:Color = new Color();
+		
+
 
 		
 		
 		
-		public function Controller(_stage:Stage, _view:View, _model:Model) {
+		public function Controller(_stage:Stage, _view:View, _model:Model, _tracker:GATracker) {
 			
+			tracker = _tracker;
 			controller = this;
 			view = _view;
 			model = _model;
@@ -73,6 +81,8 @@ package
 			
 			view.addEventListener(EventTypes.ADD_BENDER, add_Bender);
 			
+			view.addEventListener(Event.ENTER_FRAME, func_ENTER_FRAME); // для слежки mouse distance
+			
 			
 			//для событий OVER, OUT нужно указывать конкретную цель
 			view.DC_plug.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
@@ -82,8 +92,6 @@ package
 			
 			var charge:int = RAND(charge_min, charge_max);
 			model.charge_level = charge;
-			trace ("charge = " + charge);
-			
 		}
 		
 		
@@ -92,10 +100,61 @@ package
 		
 		
 		
+		
+		
+		
+		
+		/*********************************************
+		 *               Двигание bender             *
+		 *                                           *
+		 */ //****************************************
+		private function func_ENTER_FRAME(event:Event):void {
+		
+			if (bender != null && bender.allow_bender_hide) {
+			
+				var bender_placement:Point = new Point(bender.x, bender.y);
+				var cursor_location:Point = new Point(mouseX, mouseY);
+				
+				var distance:Number = Point.distance(bender_placement, cursor_location);
+				
+				if (distance < 280) {
+					if (bender.y < 1200) { // задвигание
+						bender.y += 10;
+						//trace ("bender.y = " + bender.y, "distance = " + distance);
+					}
+				}
+				else if (distance >= 380){
+					if (bender.y > 770) bender.y -= 10; // выдвигание
+				}
+			}
+			//event.updateAfterEvent();
+		}
+		
+		
+		
+		
+		
 		public function add_Bender(event:Event):void {
-			if (bender == null) {
+			if (bender == null && !model.show_tips) {
+				
+				tracker.trackPageview("Trick found");
 				bender = new Bender(STAGE);
-				addChild(bender);
+				// коррекция цвета мувиклипа
+				c.setTint(002600, 0.08);
+				bender.transform.colorTransform = c;
+				view.addChild(bender);
+				
+				trick = new Secret();
+				trick.x = 620;
+				trick.y = 715;
+				trick.txt.text = Model.langArr[43][model.LANG];
+				view.addChild(trick);
+				var dissolve_trick:Tween = new Tween (trick, 'alpha', None.easeInOut, 1, 0, 3, true);
+			}
+			else if (bender != null){
+				bender.destroy();
+				view.removeChild(bender);
+				bender = null;
 			}
 		}
 
@@ -377,8 +436,8 @@ package
 		
 		
 		// рандомайзер
-		public function RAND(min:Number, max:Number): int {
-
+		public function RAND(min:Number, max:Number):int {
+	
 			var arg: Number = (max - min) * Math.random() + min;
 			return arg;
 		}

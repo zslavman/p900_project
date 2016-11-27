@@ -64,7 +64,7 @@ package
 			langArr[24] = [" v.2.0", " v.2.0"];
 			langArr[25] = ["Язык интерфейса:", "Interface language:"];
 			langArr[26] = ["русский", "english"];
-			langArr[27] = ["Симулятор создан для ознакомления с функционалом реального оборудования поиска залегания трассы П-900 и предназначен для обучения пользователя.", "The simulator is designed to represent a functionality of a real tracsing equipment P-900 and intended for both – customer familiarisation and user training."];
+			langArr[27] = ["Симулятор создан для ознакомления с функционалом реального оборудования поиска залегания трассы П-900 и предназначен для обучения пользователя.", "The simulator is designed to represent a functionality of a real tracing equipment P-900 and intended for both – customer familiarisation and user training."];
 			langArr[28] = ['Разработано для KEP Power Testing Ltd., \r © Вячеслав Зинько, 2016 г. \r <a href="event:myMail">v.zinko@kep.ua</a>', 'Designed for KEP Power Testing Ltd. \r © Viacheslav Zinko, 2016 \r <a href="event:myMail">v.zinko@kep.ua</a>'];
 			//langArr[236] = ["mailto:zslavman@gmail.com", "mailto:zslavman@gmail.com"];
 			langArr[29] = ["mailto:v.zinko@kep.ua", "mailto:v.zinko@kep.ua"];
@@ -79,7 +79,8 @@ package
 			langArr[39] = ["акустический", "acoustic"];
 			langArr[40] = ["индукционный", "inductive"];
 			langArr[41] = ["Индикатор приема сигнала внутренней антенной приемника в режиме акустики", "LED, indicating a signal receiving by internal antenna in acoustic mode"];
-			langArr[42] = ["Индикатор питания", "Power indicator"];
+			langArr[42] = ["Индикатор питания", "Power LED"];
+			langArr[43] = ["Вы нашли секрет!", "You have found the trick!"];
 			
 			// синхронизация с кукисами клиента, для начала заменим пробелы в названии создаваемого шаредобжект (не допускаются пробелы в названии шаредобджект)
 			// создаем регулярное выражение для поска пробелов в названии

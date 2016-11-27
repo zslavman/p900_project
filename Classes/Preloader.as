@@ -34,7 +34,7 @@ package
 		private var preVisual:PreloaderVisual;
 		private var bLoaded: uint = loaderInfo.bytesLoaded;
 		private var bTotal: uint = loaderInfo.bytesTotal;
-		private var Timer_Test:Timer = new Timer(50, 10); //50 ;100
+		private var Timer_Test:Timer = new Timer(50, 7); //50 
 		private var my_menu:ContextMenu;
 		
 		
@@ -126,8 +126,8 @@ package
 		
 		private function loadingFinished():void {
 			
-			//tracker = new GATracker(this, ACCOUNT_ID, BRIDGE_MODE, DEBUG_MODE);
-			//tracker.trackPageview("Loading OK");
+			tracker = new GATracker(this, ACCOUNT_ID, BRIDGE_MODE, DEBUG_MODE);
+			tracker.trackPageview("Loading OK");
 		
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			Timer_Test.reset();
@@ -138,7 +138,7 @@ package
 
 			nextFrame();
 			view = new View(stage, model_data);
-			controller = new Controller(stage, view, model_data);
+			controller = new Controller(stage, view, model_data, tracker);
 			addChild(view);
 			addChild(controller);
 		}

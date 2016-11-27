@@ -7,8 +7,8 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.events.Event
 	import flash.events.TimerEvent;
-	import flash.media.Sound;
 	import flash.utils.Timer;
+	import flash.media.Sound;
 	
 	import flash.events.FocusEvent
 	
@@ -105,6 +105,8 @@ package
 			STAGE.addEventListener(MouseEvent.MOUSE_MOVE, contrast_handle_MOUSE_MOVE);
 			STAGE.addEventListener(MouseEvent.MOUSE_UP, contrast_handle_MOUSE_UP);
 			
+			//STAGE.addEventListener(MouseEvent.MOUSE_MOVE, stage_MOUSE_MOVE);
+			
 			contrast_handle.buttonMode = true;
 			contrast_handle.mouseChildren = false;
 			LCD.contrastMax_scr.visible = false;
@@ -139,6 +141,13 @@ package
 		
 		
 		
+		
+		
+		
+		//public function stage_MOUSE_MOVE(event:MouseEvent):void {
+		//
+			//dispatchEvent(new Event(EventTypes.STAGE_MOUSE_MOVE));
+		//}
 		
 		
 				
