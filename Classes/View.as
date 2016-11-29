@@ -244,6 +244,7 @@ package
 		}
 		public function contrast_handle_MOUSE_MOVE(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.CONTRAST_MOUSE_MOVE));
+			event.updateAfterEvent();
 		}
 		public function contrast_handle_MOUSE_UP(event:MouseEvent):void {
 			dispatchEvent(new Event(EventTypes.CONTRAST_MOUSE_UP));

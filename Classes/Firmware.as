@@ -68,7 +68,6 @@ package
 			// слушатель на зажимание кнопок
 			view.addEventListener(EventTypes.JAMM_BUTTON, func_all_Buttons_DOWN);
 			
-
 			Timer_LoadingFwr.addEventListener(TimerEvent.TIMER, func_Timer_LoadingFwr);
 			Timer_LoadingFwr.start();
 			Timer_Miganie.addEventListener(TimerEvent.TIMER, func_Timer_Miganie);
@@ -78,11 +77,10 @@ package
 			view.container.visible = true;
 			Timer_Deviation.addEventListener(TimerEvent.TIMER, func_Timer_Deviation);
 			
+			view.LED_red.gotoAndStop('frame_on');
 			
 			// определения кадра отображения батареи в зависимости от числа заряда
 			charge_frame = view.container.battery_indication.totalFrames - Math.round(model.charge_level / 20);
-			//trace ("view.container.battery_indication.totalFrames = " + view.container.battery_indication.totalFrames);
-			//trace ("charge_frame = " + charge_frame);
 			
 			view.container.battery_indication.gotoAndStop(charge_frame);
 			view.container.battery_indication.visible = false;
@@ -195,12 +193,7 @@ package
 		
 		
 		
-		
-		
-		
-		
-		
-		
+	
 		
 		
 		
@@ -255,11 +248,13 @@ package
 					Timer_LoadingFwr.stop();
 					view.container.line2.text = Model.langArr[22][model.LANG];
 					show_coefficient = true;
+					view.LED_red.gotoAndStop('frame_off');
 				}
 			}
 			
 			else if (Timer_LoadingFwr.currentCount == loading_duration) {
  
+				view.LED_red.gotoAndStop('frame_off');
 				view.container.battery_indication.visible = true;
 				
 				Screen_init();
@@ -279,7 +274,7 @@ package
 		 *                                           *
 		 */ //****************************************
 		public function func_Timer_Miganie(event:TimerEvent):void {
-			
+
 			count_mig++;
 			if (count_mig > 10) count_mig = 0;
 			

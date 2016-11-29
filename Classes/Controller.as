@@ -3,6 +3,7 @@ package
 	import About_Window;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
+	import flash.utils.Timer;
 
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
@@ -11,6 +12,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.filters.BlurFilter;
 	import flash.display.Stage;
 	
@@ -57,6 +59,8 @@ package
 		private var c:Color = new Color();
 		private var dissolve_trick:Tween;
 		
+		private var Timer_Bender_Moover:Timer = new Timer (10);
+		
 
 
 		
@@ -82,8 +86,8 @@ package
 			
 			view.addEventListener(EventTypes.ADD_BENDER, add_Bender);
 			
-			view.addEventListener(Event.ENTER_FRAME, func_ENTER_FRAME); // для слежки mouse distance
-			
+			Timer_Bender_Moover.addEventListener(TimerEvent.TIMER, func_Timer_Bender_Moover); // для слежки mouse distance
+			Timer_Bender_Moover.start();
 			
 			//для событий OVER, OUT нужно указывать конкретную цель
 			view.DC_plug.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
@@ -109,7 +113,7 @@ package
 		 *               Двигание bender             *
 		 *                                           *
 		 */ //****************************************
-		private function func_ENTER_FRAME(event:Event):void {
+		private function func_Timer_Bender_Moover(event:TimerEvent):void {
 		
 			if (bender != null && bender.allow_bender_hide) {
 			
@@ -119,16 +123,13 @@ package
 				var distance:Number = Point.distance(bender_placement, cursor_location);
 				
 				if (distance < 280) {
-					if (bender.y < 1200) { // задвигание
-						bender.y += 10;
-						//trace ("bender.y = " + bender.y, "distance = " + distance);
-					}
+					if (bender.y < 1200) bender.y += 50; // задвигание
 				}
 				else if (distance >= 380){
 					if (bender.y > 770) bender.y -= 10; // выдвигание
 				}
 			}
-			//event.updateAfterEvent();
+			event.updateAfterEvent();
 		}
 		
 		

@@ -96,8 +96,11 @@ package
 			
 			kicks++;
 			iron_hit.play();
-			Twink();
-			if (kicks > 3 && kicks <= 7) PlaySound(1);
+			
+			if (kicks > 3 && kicks <= 7) {
+				Twink();
+				PlaySound(1);
+			}
 			else if (kicks > 7) {
 				allow_bender_hide = true;	
 				var rnd:int = RAND(1, 4);
