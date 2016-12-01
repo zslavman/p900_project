@@ -156,7 +156,6 @@ package
 			
 			if (Timer_Jamming.currentCount == 4) {
 				Timer_Jamming.reset();
-				//trace ('Jamming_' + Timer_Jamming.currentCount);
 				// запуск таймера повтора
 				Timer_FastInput.start();
 			} 
@@ -209,7 +208,6 @@ package
 		public function func_Timer_FastInput(event:TimerEvent):void {
 			
 			// в зависимости от флага запуск диспатчера
-			//trace ('FastInput_' + Timer_FastInput.currentCount, 'button_flag = ' + button_flag);
 			switch (button_flag){ 
 				case 'button_sync_up':
 					view.dispatchEvent(new Event(EventTypes.SYNC_UP_CLICK));

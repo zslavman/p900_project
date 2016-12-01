@@ -23,12 +23,17 @@ package
 		private var _LIGHT_ON:Boolean = false;
 		private var _ScreenALPHA:Number = 0;
 		private var _loading_ready:Boolean = false;
-		private var _charge_level:int; // число заряда батареи (от 20 до 100), вычисляется после загрузки Controller.as
+		
+		private var _charge_level:int; // число заряда батареи (от 20 до 100), вычисляется после загрузки Controller.as, т.к. там ф-ция рандомазера
+		private var charge_min:int = 30; // пределы заряда в процентах
+		private var charge_max:int = 100;
+		
 		private var _charge_connected:Boolean = false; // подключена ли зарядка
 		private var _show_tips:Boolean; // показывать подсказки
-		
+
 		public static var SharedObj:SharedObject;
 		private var lang:String; 
+		
 
 		
 		
@@ -115,6 +120,7 @@ package
 				show_tips = true; // тут идет вызов ф-ции set show_tips();
 			}
 			
+			
 			gainFilterConst = ["1.0", "1.2", "1.5", "1.9", "2.4", "3.0", "3.7", "4.8", "6.0", "7.5", "10.0", "12.5", "15.5", "19.5", 24, 31, 40, 50, 65, 80, 100, 130, 160, 200, 250, 325, 420, 520, 650, 850, 1050, 1300, 1700, 2100, 2800, 3500, 4300, 5500, 8000, 10000, 12000, 16000, 20000, 25000, 50000]; //45 элементов, начинать с 21-го
 			gainAcusticaConst = [1, "1.3", "1.6", 2, "2.4", 3, 4, 5, 6, 8, 10, 13, 16, 20, 26, 33, 44, 53, 67, 92, 110, 200, 400, 800, 1600, 3000, 6000, 12000, 20000, 40000]; //30 элементов, начинать с 5-го
 		}
@@ -122,6 +128,14 @@ package
 		
 
 		
+		
+		
+		public function get give_charge_limits():Array {
+			var array:Array = [];
+			array['min'] = charge_min;
+			array['max'] = charge_max;
+			return array;
+		}
 		
 		
 		public function get LANG():uint {

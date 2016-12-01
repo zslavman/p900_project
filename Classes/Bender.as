@@ -1,5 +1,6 @@
 package 
 {
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
 	import flash.display.MovieClip;
@@ -8,12 +9,14 @@ package
 	import flash.media.SoundChannel;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	import flash.geom.Point;
 	
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.*;
 	
 	import flash.filters.DropShadowFilter;
+	
 	
 	
 	
@@ -46,6 +49,8 @@ package
 		private var kicks:uint = 0;
 		
 		public var allow_bender_hide:Boolean = false;
+		private var Timer_Bender_Moover:Timer = new Timer (10);
+		private var BTween:Tween;
 		
 	
 		
@@ -58,8 +63,12 @@ package
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, followCursor);
 			this.buttonMode = true;
 			this.addEventListener(MouseEvent.MOUSE_DOWN, bender_MOUSE_DOWN);
+			
 			Timer_Twink.addEventListener(TimerEvent.TIMER, func_Timer_Twink);
 			Timer_Twink.start();
+			
+			Timer_Bender_Moover.addEventListener(TimerEvent.TIMER, func_Timer_Bender_Moover); // для слежки mouse distance
+			Timer_Bender_Moover.start();
 		
 			this.x = 140; // x = 770
 			hi_bender = new Tween (this, 'y', Strong.easeOut, 1200, 770, 0.5, true);
@@ -69,7 +78,38 @@ package
 		
 		
 		
-		 
+		
+		
+		
+		/*********************************************
+		 *               Двигание bender             *
+		 *                                           *
+		 */ //****************************************
+		private function func_Timer_Bender_Moover(event:TimerEvent):void {
+		
+			if (allow_bender_hide){ 
+				var bender_placement:Point = new Point(this.x, this.y);
+				var cursor_location:Point = new Point(stage.mouseX, stage.mouseY);
+				
+				var distance:Number = Point.distance(bender_placement, cursor_location);
+				
+				if (distance < 280) {
+					if (this.y < 1200) this.y += 50; // задвигание
+					
+				}
+				else if (distance >= 380){
+					if (this.y > 770) this.y -= 10; // выдвигание
+				}
+			}
+			event.updateAfterEvent();
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		/*********************************************
@@ -176,6 +216,7 @@ package
 			create_pop.play();
 			Channel_1.stop();
 			Timer_Twink.reset();
+			Timer_Bender_Moover.reset();
 			allow_bender_hide = false;
 			kicks = 0;
 		}

@@ -2,7 +2,6 @@ package
 {
 	import About_Window;
 	import flash.display.MovieClip;
-	import flash.geom.Point;
 	import flash.utils.Timer;
 
 	import fl.transitions.Tween;
@@ -19,6 +18,7 @@ package
 	import fl.motion.Color;
 	import com.google.analytics.GATracker;
 	
+	
 	/**
 	 * ...
 	 * @author zslavman
@@ -26,27 +26,23 @@ package
 	 */
 	
 	 
-	public class Controller extends Sprite {
+	public class Controller extends Sprite{
 		
 		private var model:Model;
 		private var view:View;
 		private var controller:Controller;
-		private var STAGE:Stage;
-		private var trick:Secret;
-		private var tracker:GATracker;
-
 		private var firmware:Firmware;
 		private var about_window:About_Window;
 		private var bender:Bender;
+		private var STAGE:Stage;
+		private var trick:Secret;
+		private var tracker:GATracker;
 		
 		
 		private var langArr:Array = [];
 		private var offset:Number;
 		private var rotate_limit:Number = 150;// лимит поворота ручки контраст в градусах
 		private var final_rotation:Number = 0;
-		
-		private var charge_min:int = 30; // пределы заряда в процентах
-		private var charge_max:int = 100;
 		
 		private var DisplayObjects:Array = []; // массив дисплейобъектов которые нужно блюрить
 		private var blurFilter:BlurFilter;
@@ -59,7 +55,7 @@ package
 		private var c:Color = new Color();
 		private var dissolve_trick:Tween;
 		
-		private var Timer_Bender_Moover:Timer = new Timer (10);
+
 		
 
 
@@ -86,52 +82,20 @@ package
 			
 			view.addEventListener(EventTypes.ADD_BENDER, add_Bender);
 			
-			Timer_Bender_Moover.addEventListener(TimerEvent.TIMER, func_Timer_Bender_Moover); // для слежки mouse distance
-			Timer_Bender_Moover.start();
-			
 			//для событий OVER, OUT нужно указывать конкретную цель
 			view.DC_plug.addEventListener(EventTypes.CHARGER_TARGET_OVER, charge_Over); 
 			view.DC_plug.addEventListener(EventTypes.TARGET_OUT, charge_Out);
 			
 			view.addEventListener(EventTypes.TARGET_CLICK, charge_MOUSE_DOWN);
 			
-			var charge:int = RAND(charge_min, charge_max);
+			var charge:int = RAND(model.give_charge_limits['min'], model.give_charge_limits['max']);
 			model.charge_level = charge;
 		}
 		
 		
 
 		
-		
-		
-		
-		
-		
-		
-		
-		/*********************************************
-		 *               Двигание bender             *
-		 *                                           *
-		 */ //****************************************
-		private function func_Timer_Bender_Moover(event:TimerEvent):void {
-		
-			if (bender != null && bender.allow_bender_hide) {
-			
-				var bender_placement:Point = new Point(bender.x, bender.y);
-				var cursor_location:Point = new Point(mouseX, mouseY);
-				
-				var distance:Number = Point.distance(bender_placement, cursor_location);
-				
-				if (distance < 280) {
-					if (bender.y < 1200) bender.y += 50; // задвигание
-				}
-				else if (distance >= 380){
-					if (bender.y > 770) bender.y -= 10; // выдвигание
-				}
-			}
-			event.updateAfterEvent();
-		}
-		
+
 		
 		
 		

@@ -89,8 +89,6 @@ package
 				tips_array ['tip'][j].alpha = 0;
 			}
 			
-			//set_buttonMode('show');
-			
 			
 			//STAGE.addEventListener(Event.RESIZE, resizeListener); 
 			STAGE.addEventListener(KeyboardEvent.KEY_DOWN, Key_DOWN);
@@ -104,8 +102,6 @@ package
 			contrast_handle.addEventListener(MouseEvent.MOUSE_DOWN, contrast_handle_MOUSE_DOWN);
 			STAGE.addEventListener(MouseEvent.MOUSE_MOVE, contrast_handle_MOUSE_MOVE);
 			STAGE.addEventListener(MouseEvent.MOUSE_UP, contrast_handle_MOUSE_UP);
-			
-			//STAGE.addEventListener(MouseEvent.MOUSE_MOVE, stage_MOUSE_MOVE);
 			
 			contrast_handle.buttonMode = true;
 			contrast_handle.mouseChildren = false;
@@ -132,22 +128,13 @@ package
 			 *          Проверки разного рода            *
 			 */ //****************************************
 			
-			
 			//addEventListener(Event.ENTER_FRAME, testing);
 			//STAGE.addEventListener(Event.ACTIVATE, act);
 			//STAGE.addEventListener(Event.DEACTIVATE, deact);
 			//STAGE.addEventListener(FocusEvent.FOCUS_IN, focusInHandler);
 		}
 		
-		
-		
-		
-		
-		
-		//public function stage_MOUSE_MOVE(event:MouseEvent):void {
-		//
-			//dispatchEvent(new Event(EventTypes.STAGE_MOUSE_MOVE));
-		//}
+
 		
 		
 				
